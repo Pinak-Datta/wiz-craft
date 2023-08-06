@@ -15,7 +15,6 @@ WizCraft is a cutting-edge Command Line Interface (CLI) tool developed to simpli
 - [Features](#features)
 - [Getting Started](#getting-started)
   - [Installation](#installation)
-  - [Usage](#usage)
 - [Tasks](#tasks)
   - [Data Description](#data-description)
   - [Handle Null Values](#handle-null-values)
@@ -38,19 +37,16 @@ WizCraft is a cutting-edge Command Line Interface (CLI) tool developed to simpli
 
 ### Installation
 
-1. Clone this repository:
+1. Run the pip command:
+   ```bash
+   pip install wiz-craft
 
-   ```bash
-   git clone https://github.com/Pinak-Datta/wiz-craft.git
-   cd wiz-craft
-2. Install the required dependencies:
+2. To use the module, use the commands:
+    ```python
+    from wizcraft import Wizcraft
+    wz_object = Wizcraft()
+    wz_object.run()
 
-   ```bash
-   pip install -r requirements.txt
-### Usage
-1. Run the Main Script:
-   ```bash
-   python main.py
 2. Follow the on-screen prompts to load your dataset, select target variables, and perform preprocessing tasks.
 
 ## Features Available
