@@ -1,3 +1,18 @@
+Metadata-Version: 2.1
+Name: wiz-craft
+Version: 0.0.1
+Summary: A CLI-based dataset preprocessing tool for machine learning tasks. Features include data exploration, null value handling, one-hot encoding, and feature scaling, and download the modified dataset effortlessly.
+Author: Pinak Datta
+Author-email: pinakdatta2002@gmail.com
+Keywords: Dataset preprocessing,Data cleaning,Machine learning,Data analysis,Data manipulation,Data preparation,Data engineering,CLI tool,Command Line Interface,Data science,Feature scaling,One-hot encoding,Data imputation,Null value handling,Data exploration,Data visualization,Python library,Data transformation,Data processing,DataWiz,Wizcraft,wiz-craft,WizCraft
+Classifier: Programming Language :: Python :: 3
+Classifier: Intended Audience :: Developers
+Classifier: Operating System :: MacOS :: MacOS X
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: Unix
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
 # WizCraft - CLI-Based Dataset Preprocessing Tool
 
 WizCraft is a cutting-edge Command Line Interface (CLI) tool developed to simplify the process of dataset preprocessing for machine learning tasks. It aims to provide a seamless and efficient experience for data scientists of all levels, facilitating the preparation of data for various machine-learning applications.

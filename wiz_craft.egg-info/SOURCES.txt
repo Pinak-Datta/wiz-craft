@@ -1,0 +1,8 @@
+LICENSE
+README.rst
+setup.py
+wiz_craft.egg-info/PKG-INFO
+wiz_craft.egg-info/SOURCES.txt
+wiz_craft.egg-info/dependency_links.txt
+wiz_craft.egg-info/requires.txt
+wiz_craft.egg-info/top_level.txt
