@@ -45,9 +45,13 @@ WizCraft is a cutting-edge Command Line Interface (CLI) tool developed to simpli
     ```python
     from wizcraft import Wizcraft
     wz_object = Wizcraft()
-    wz_object.run()
+    wz_object.run()  
 
-2. Follow the on-screen prompts to load your dataset, select target variables, and perform preprocessing tasks.
+3. Follow the on-screen prompts to load your dataset, select target variables, and perform preprocessing tasks.
+
+<p align="center">
+  <img src="https://i.imgur.com/XFqQGrb.png" alt="wizcraft-cli_welcome" />
+</p>
 
 ## Features Available
 
