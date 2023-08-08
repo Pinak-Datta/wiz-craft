@@ -3,13 +3,13 @@ from setuptools import setup, find_packages
 with open('Readme.md', 'r') as file_handler:
     long_description = file_handler.read()
 
-VERSION = '0.0.2',
+VERSION = '1.0.1',
 DESCRIPTION = 'A CLI-based dataset preprocessing tool for machine learning tasks. Features include data exploration, ' \
               'null value handling, one-hot encoding, and feature scaling, and download the modified dataset ' \
               'effortlessly. '
 setup(
     name='wiz-craft',
-    version='0.0.1',
+    version='1.0.1',
     author_email='pinakdatta2002@gmail.com',
     author='Pinak Datta',
     description='A CLI-based dataset preprocessing tool for machine learning tasks. Features include data '
