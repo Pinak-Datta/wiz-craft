@@ -3,15 +3,16 @@ from setuptools import setup, find_packages
 with open('Readme.md', 'r') as file_handler:
     long_description = file_handler.read()
 
-VERSION = '1.0.1',
 DESCRIPTION = 'A CLI-based dataset preprocessing tool for machine learning tasks. Features include data exploration, ' \
               'null value handling, one-hot encoding, and feature scaling, and download the modified dataset ' \
               'effortlessly. '
 setup(
     name='wiz-craft',
-    version='1.0.1',
+    version='1.0.2',
+    url='https://github.com/Pinak-Datta/wiz-craft',
     author_email='pinakdatta2002@gmail.com',
     author='Pinak Datta',
+    license='OSI Approved :: MIT License',
     description='A CLI-based dataset preprocessing tool for machine learning tasks. Features include data '
                 'exploration, null value handling, one-hot encoding, and feature scaling, and download the modified '
                 'dataset effortlessly.',
@@ -25,12 +26,11 @@ setup(
         'scipy',
         'pandoc'
     ],
-    keywords=['Dataset preprocessing', 'Data cleaning', 'Machine learning', 'Data analysis', 'Data manipulation',
-              'Data preparation', 'Data engineering', 'CLI tool', 'Command Line Interface', 'Data science',
-              'Feature scaling', 'One-hot encoding', 'Data imputation', 'Null value handling', 'Data exploration',
-              'Data visualization', 'Python library', 'Data transformation', 'Data processing', 'DataWiz', 'Wizcraft',
+    keywords=['Dataset preprocessing', 'Data cleaning', 'Machine learning', 'Data manipulation',
+              'Data preparation', 'Data engineering', 'Feature scaling', 'One-hot encoding', 'Data imputation', 'Null value handling', 'Data exploration',
+              'Data processing', 'wizcraft',
               'wiz-craft', 'WizCraft'
-    ],
+              ],
 
     classifiers=[
         "Programming Language :: Python :: 3",

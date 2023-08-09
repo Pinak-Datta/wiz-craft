@@ -1,14 +1,14 @@
 # WizCraft.py
 import pandas as pd
 import sys
-from data_description import DataDescription
-from categorical import EncodeCategoricalValues
-from download import DownloadDataset
-from feature_selection import FeatureScaling
-from imputation import DataImputation
+from wizcraft.data_description import DataDescription
+from wizcraft.categorical import EncodeCategoricalValues
+from wizcraft.download import DownloadDataset
+from wizcraft.feature_selection import FeatureScaling
+from wizcraft.imputation import DataImputation
 
 
-class Wizcraft:
+class Preprocess:
     def __init__(self):
         self.original_dataset = None
         self.dataset = None
@@ -82,7 +82,7 @@ class Wizcraft:
         print("5. Download the modified Dataset")
         print("-1. Exit")
 
-    def run(self):
+    def start(self):
         self.welcome_message()
         self.load_dataset_from_command_line()
         # self.display_columns()
@@ -222,7 +222,5 @@ class Wizcraft:
 
 
 if __name__ == "__main__":
-    project = Wizcraft()
-    project.run()
-
-
+    project = Preprocess()
+    project.start()
