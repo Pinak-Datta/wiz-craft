@@ -43,9 +43,9 @@ WizCraft is a cutting-edge Command Line Interface (CLI) tool developed to simpli
 
 2. To use the module, use the commands:
     ```python
-    from wizcraft import Wizcraft
-    wz_object = Wizcraft()
-    wz_object.run()  
+    from wizcraft.preprocess import Preprocess
+    wiz_obj = Preprocess()
+    wiz_obj.start()  
 
 3. Follow the on-screen prompts to load your dataset, select target variables, and perform preprocessing tasks.
 

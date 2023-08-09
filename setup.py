@@ -8,7 +8,7 @@ DESCRIPTION = 'A CLI-based dataset preprocessing tool for machine learning tasks
               'effortlessly. '
 setup(
     name='wiz-craft',
-    version='1.0.2',
+    version='1.0.2.1',
     url='https://github.com/Pinak-Datta/wiz-craft',
     author_email='pinakdatta2002@gmail.com',
     author='Pinak Datta',
