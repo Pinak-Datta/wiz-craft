@@ -2,7 +2,9 @@
   <img src="https://svgshare.com/i/wCo.svg" alt="wizcraft-banner" />
 </p>
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT) 
+
+[![Downloads](https://static.pepy.tech/personalized-badge/wiz-craft?period=month&units=international_system&left_color=brightgreen&right_color=orange&left_text=Weekly%20Downloads)](https://pepy.tech/project/wiz-craft)
 
 # WizCraft - CLI-Based Dataset Preprocessing Tool
 
