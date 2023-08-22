@@ -1,6 +1,9 @@
 <p align="center">
   <img src="https://svgshare.com/i/wCo.svg" alt="wizcraft-banner" />
 </p>
+<p align="center">
+  <a href="https://www.producthunt.com/posts/wizcraft?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-wizcraft" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=410900&theme=light" alt="WizCraft - CLI&#0032;tool&#0032;that&#0032;simplifies&#0032;the&#0032;process&#0032;of&#0032;data&#0032;pre&#0045;processing | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+</p>
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT) 
 
