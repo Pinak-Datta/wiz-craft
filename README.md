@@ -15,6 +15,8 @@ WizCraft is a cutting-edge Command Line Interface (CLI) tool developed to simpli
 
 **[Try the tool online here](https://replit.com/@PinakDatta/DataWiz)**
 
+**Check out the [Contribution Guide](https://github.com/Pinak-Datta/wiz-craft/blob/main/CONTRIBUTING.md) if you want to Contribute to this project**
+
 ## Table of Contents
 
 - [Features](#features)
@@ -27,6 +29,7 @@ WizCraft is a cutting-edge Command Line Interface (CLI) tool developed to simpli
   - [Feature Scaling](#feature-scaling)
   - [Save Preprocessed Dataset](#save-preprocessed-dataset)
 - [Future Works](#future-works)
+- [Contributing to the Project](#contribute-to-the-project)
 
 
 
@@ -110,8 +113,11 @@ WizCraft is a cutting-edge Command Line Interface (CLI) tool developed to simpli
 
 - [ ] Extension for NLP tasks (like tokenization, stemming)
 
-- [ ] Advanced Data Imputation Techniques: Adding support for advanced data imputation techniques, such as K-nearest neighbors (KNN) imputation.
+- [ ] Advanced Data Imputation Techniques: Adding support for advanced data imputation techniques, such as K-nearest neighbours (KNN) imputation.
 
 - [ ] User-Friendly Interface: Improving the user interface to provide more interactive and user-friendly features, such as progress bars, error handling, and clear instructions.
 
 - [ ] Using Curses for terminal Manipulation.
+
+## Contributing to the Project
+**Check out the [Contribution Guide](https://github.com/Pinak-Datta/wiz-craft/blob/main/CONTRIBUTING.md) if you want to contribute to this project**
