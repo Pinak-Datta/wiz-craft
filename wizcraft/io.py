@@ -30,6 +30,9 @@ class Output:
     def colored_text(self, text: str, color: str) -> Text:
         return Text(text, style=color)
 
+    def log_text(self, text: str):
+        self.console.log(text)
+
     # The updated print function
     # The Code can be one of the following: info, warning, danger, success, normal
     # Default is normal if no code is specified
@@ -56,13 +59,12 @@ class Output:
 
     # Print a options in a nice column
     # This helps it stand out from the rest of the output
-    def show_options(self, options) -> str:
-        columns = Columns(options, equal=True, expand=True)
-        self.c_print(str(columns))
-        return self.ask("Select an option", options)
+    def get_column(self, options, expand=True, equal=True):
+        columns = Columns(options, equal=equal, expand=expand)
+        return columns
 
     def show_panel(self, title: str, content=None, color=None):
-        panel = Panel.fit(content, title=title, border_style=color)
+        panel = Panel.fit(Text(content), title=title, border_style=color)
         self.console.print(panel)
 
     # Data is in this format

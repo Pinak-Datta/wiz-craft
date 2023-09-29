@@ -1,64 +1,108 @@
 # imputation.py
 
 import pandas as pd
+from wizcraft.io import Output
 
 
 class DataImputation:
     def __init__(self, dataset):
         self.dataset = dataset
+        self.output = Output()
 
     def show_null_values_count(self):
-        print("\nNumber of null values in each column:")
+        self.output.c_print(
+            "\nNumber of [underline]null[/underline] values in each column:"
+        )
         null_counts = self.dataset.isnull().sum()
         print(null_counts)
 
     def remove_column(self, column_name):
         if column_name not in self.dataset.columns:
-            print(f"Error: Column '{column_name}' not found in the dataset.")
+            self.output.c_print(
+                f"Error: Column [underline]'{column_name}'[/unerline] not found in the dataset.",
+                code="danger",
+            )
             return
 
         self.dataset.drop(column_name, axis=1, inplace=True)
-        print(f"Column '{column_name}' removed from the dataset.")
+        self.output.c_print(
+            f"Column [underline]'{column_name}'[/underline] removed from the dataset.",
+            code="success",
+        )
 
     def fill_null_with_mean(self, column_name):
         if column_name not in self.dataset.columns:
-            print(f"Error: Column '{column_name}' not found in the dataset.")
+            self.output.c_print(
+                f"Error: Column [underline]'{column_name}'[/unerline] not found in the dataset.",
+                code="danger",
+            )
             return
 
         if pd.api.types.is_numeric_dtype(self.dataset[column_name]):
-            self.dataset[column_name].fillna(self.dataset[column_name].mean(), inplace=True)
-            print(f"\nNull values in column '{column_name}' filled with the mean.")
+            self.dataset[column_name].fillna(
+                self.dataset[column_name].mean(), inplace=True
+            )
+            self.output.c_print(
+                f"\nNull values in column '{column_name}' filled with the mean.",
+                code="success",
+            )
         else:
-            print(f"\nError: Column '{column_name}' is not numeric. Cannot fill with mean.")
+            self.output.c_print(
+                f"\nError: Column [underline]'{column_name}'[/underline] is not numeric. Cannot fill with median.",
+                code="danger",
+            )
 
     def fill_null_with_median(self, column_name):
         if column_name not in self.dataset.columns:
-            print(f"\nError: Column '{column_name}' not found in the dataset.")
+            self.output.c_print(
+                f"Error: Column [underline]'{column_name}'[/underline] not found in the dataset.",
+                code="danger",
+            )
             return
 
         if pd.api.types.is_numeric_dtype(self.dataset[column_name]):
-            self.dataset[column_name].fillna(self.dataset[column_name].median(), inplace=True)
-            print(f"\nNull values in column '{column_name}' filled with the median.")
+            self.dataset[column_name].fillna(
+                self.dataset[column_name].median(), inplace=True
+            )
+            self.output.c_print(
+                f"\nNull values in column '{column_name}' filled with the median.",
+                code="success",
+            )
         else:
-            print(f"\nError: Column '{column_name}' is not numeric. Cannot fill with median.")
+            self.output.c_print(
+                f"\nError: Column [underline]'{column_name}'[/underline] is not numeric. Cannot fill with median.",
+                code="danger",
+            )
 
     def fill_null_with_mode(self, column_name):
         if column_name not in self.dataset.columns:
-            print(f"\nError: Column '{column_name}' not found in the dataset.")
+            self.output.c_print(
+                f"Error: Column [underline]'{column_name}'[/underline] not found in the dataset.",
+                code="danger",
+            )
             return
 
-        self.dataset[column_name].fillna(self.dataset[column_name].mode().iloc[0], inplace=True)
-        print(f"\nNull values in column '{column_name}' filled with the mode.")
+        self.dataset[column_name].fillna(
+            self.dataset[column_name].mode().iloc[0], inplace=True
+        )
+        self.output.c_print(
+            f"\nNull values in column '{column_name}' filled with the mode.",
+            code="success",
+        )
 
     def display_menu(self):
-        print("\n----Imputation tasks----:")
-        print("1: Show number of null values")
-        print("2: Remove columns")
-        print("3: Fill Null values with mean")
-        print("4: Fill Null values with median")
-        print("5: Fill Null values with mode")
-        print()
-        print("(To go back to the previous menu, press -1)")
+        options = "\n".join(
+            [
+                "1. Show number of null values",
+                "2. Remove columns",
+                "3. Fill Null values with mean",
+                "4. Fill Null values with median",
+                "5. Fill Null values with mode",
+                "-1. Return to previous menu",
+            ]
+        )
+
+        self.output.show_panel("Imputation tasks", content=options, color="blue")
 
 
 # if __name__ == "__main__":
