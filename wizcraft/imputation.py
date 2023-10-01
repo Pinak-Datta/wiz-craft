@@ -33,7 +33,7 @@ class DataImputation:
     def fill_null_with_mean(self, column_name):
         if column_name not in self.dataset.columns:
             self.output.c_print(
-                f"Error: Column [underline]'{column_name}'[/unerline] not found in the dataset.",
+                f"Error: Column [underline]'{column_name}'[/underline] not found in the dataset.",
                 code="danger",
             )
             return

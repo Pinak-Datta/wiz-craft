@@ -153,7 +153,7 @@ class Preprocess:
         data_description = DataDescription(self.dataset)
 
         data_description.display_menu()
-        option = self.output.ask("\nEnter the option: ")
+        option = self.output.ask("\nEnter the option")
 
         if option == "-1":
             return
@@ -206,10 +206,12 @@ class Preprocess:
         categorical_encoder = EncodeCategoricalValues(self.dataset)
         while True:
             categorical_encoder.display_menu()
-            option = input("\nEnter the option: ")
+            option = self.output.ask("\nEnter the option", color="yellow")
 
             if option == "-1":
-                print("\nGoing back to the previous menu...")
+                self.output.c_print(
+                    "\nGoing back to the previous menu...", code="warning"
+                )
                 break
 
             try:
@@ -230,44 +232,56 @@ class Preprocess:
         feature_scaler = FeatureScaling(self.dataset)
         while True:
             feature_scaler.display_menu()
-            option = input("\nEnter the option: ")
+            option = self.output.ask("\nEnter the option", color="yellow")
 
             if option == "-1":
-                print("\nGoing back to the previous menu....")
+                self.output.c_print(
+                    "\nGoing back to the previous menu....", code="warning"
+                )
                 break
 
             try:
                 option = int(option)
                 if option == 1:
-                    column_names = input(
-                        "\nEnter the column name(s) to perform normalization (comma-separated): "
+                    column_names = self.output.ask(
+                        "\nEnter the column name(s) to perform [underline]normalization[/underline] (comma-separated): "
                     )
                     column_names = [col.strip() for col in column_names.split(",")]
                     feature_scaler.perform_normalization(column_names)
                 elif option == 2:
-                    column_names = input(
-                        "\nEnter the column name(s) to perform standardization (comma-separated): "
+                    column_names = self.output.ask(
+                        "\nEnter the column name(s) to perform [underline]standardization[/underline] ("
+                        "comma-separated):"
                     )
                     column_names = [col.strip() for col in column_names.split(",")]
                     feature_scaler.perform_standardization(column_names)
                 elif option == 3:
                     feature_scaler.show_dataset()
                 else:
-                    print("Invalid option. Please choose a valid option.")
+                    self.output.c_print(
+                        "Invalid option. Please choose a valid option.", code="danger"
+                    )
             except ValueError:
-                print("Invalid input. Please enter a valid option.")
+                self.output.c_print(
+                    "Invalid input. Please enter a valid option.", code="danger"
+                )
 
     def perform_dataset_download(self):
         if self.dataset is not None:
             download_obj = DownloadDataset(self.dataset)
-            filename = input("\nEnter the file name you want to give to the dataset: ")
+            filename = self.output.ask(
+                "\nEnter the file name you want to give to the dataset: "
+            )
             if filename == "-1":
-                print("Going back to the previous menu...")
+                self.output.c_print(
+                    "Going back to the previous menu...", code="warning"
+                )
             else:
                 download_obj.download_dataset(filename)
         else:
-            print(
-                "Error: Dataset is not loaded. Please load the dataset first using 'load_dataset' function."
+            self.output.c_print(
+                "Error: Dataset is not loaded. Please load the dataset first using 'load_dataset' function.",
+                code="danger",
             )
 
 

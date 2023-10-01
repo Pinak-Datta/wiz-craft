@@ -10,7 +10,7 @@ class DataDescription:
         self.output = Output()
 
     def show_properties(self):
-        print("\nProperties of each numeric column:")
+        self.output.c_print("\nProperties of each numeric column:", code="info")
         numeric_columns = self.dataset.select_dtypes(include="number")
         for col in numeric_columns.columns:
             self.show_column_properties(col)
@@ -53,8 +53,10 @@ class DataDescription:
     def show_dataset_rows(self, n):
         try:
             n = int(n)
-            print(f"\nShowing first {n} rows of the dataset:")
-            print(self.dataset.head(n))
+            self.output.c_print(
+                f"\nShowing first {n} rows of the dataset:", code="info"
+            )
+            self.output.c_print(self.dataset.head(n))
         except ValueError:
             print("Error: Invalid input. Please enter a valid number of rows.")
 
