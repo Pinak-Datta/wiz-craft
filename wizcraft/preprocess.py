@@ -47,7 +47,7 @@ class Preprocess:
         try:
             file_path = self.output.ask(
                 "Enter the path of the CSV file",
-                default=self.get_csvs()[0],
+                # default=self.get_csvs()[0],
                 choices=self.get_csvs(),
                 color="blue",
             )
