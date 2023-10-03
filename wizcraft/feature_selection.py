@@ -13,6 +13,7 @@ class FeatureScaling:
             scaler = MinMaxScaler()
             self.dataset[column_names] = scaler.fit_transform(self.dataset[column_names])
             print(f"\nNormalization (Min-Max scaling) applied to column(s): {', '.join(column_names)}.")
+            return self.dataset
         except KeyError:
             print("Error: One or more specified columns not found in the dataset.")
         except ValueError:
@@ -23,6 +24,7 @@ class FeatureScaling:
             scaler = StandardScaler()
             self.dataset[column_names] = scaler.fit_transform(self.dataset[column_names])
             print(f"\nStandardization (Standard Scaler) applied to column(s): {', '.join(column_names)}.")
+            return self.dataset
         except KeyError:
             print("\nError: One or more specified columns not found in the dataset.")
         except ValueError:
