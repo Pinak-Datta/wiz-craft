@@ -77,15 +77,16 @@ class DataImputation:
         print("(To go back to the previous menu, press -1)")
 
 
-# if __name__ == "__main__":
-#     # For testing the DataImputation class
-#     df = pd.DataFrame({'NumericCol': [1, 2, None, 4, 5],
-#                        'StringCol': ['A', 'B', 'C', None, 'E']})
+if __name__ == "__main__":
+    # For testing the DataImputation class
+    df = pd.DataFrame({'NumericCol': [1, 2, None, 4, 5],
+                       'StringCol': ['A', 'B', 'C', None, 'E']})
 
-#     data_imputation = DataImputation(df)
-#     data_imputation.show_null_values_count()
-#     #data_imputation.remove_column('StringCol')
-#     #data_imputation.fill_null_with_mean('NumericCol')
-#     #data_imputation.fill_null_with_median('NumericCol')
-#     data_imputation.fill_null_with_nearest_neighbors('NumericCol', n_neighbors=2)
-#     data_imputation.fill_null_with_mode('StringCol')
+    data_imputation = DataImputation(df)
+    # data_imputation.show_null_values_count()
+    # data_imputation.remove_column('StringCol')
+    # data_imputation.fill_null_with_mean('NumericCol')
+    # data_imputation.fill_null_with_median('NumericCol')
+    data_imputation.fill_null_with_nearest_neighbors('NumericCol', n_neighbors=2)
+    data_imputation.fill_null_with_mode('StringCol')
+    print(df)
