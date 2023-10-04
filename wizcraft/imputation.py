@@ -72,7 +72,7 @@ class DataImputation:
         print("3: Fill Null values with mean")
         print("4: Fill Null values with median")
         print("5: Fill Null values with mode")
-        print("6: Fill Null values with nearest neighbors")
+        print("6: Fill Null values with K-nearest neighbors")
         print()
         print("(To go back to the previous menu, press -1)")
 
