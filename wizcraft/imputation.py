@@ -51,7 +51,7 @@ class DataImputation:
         self.dataset[column_name].fillna(self.dataset[column_name].mode().iloc[0], inplace=True)
         print(f"\nNull values in column '{column_name}' filled with the mode.")
     
-    def fill_null_with_nearest_neighbors(self, column_name, n_neighbors=2):
+    def fill_null_with_nearest_neighbors(self, column_name, n_neighbors):
         if column_name not in self.dataset.columns:
             print(f"\nError: Column '{column_name}' not found in the dataset.")
             return
