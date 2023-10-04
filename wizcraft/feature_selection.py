@@ -20,6 +20,7 @@ class FeatureScaling:
                 f"\nNormalization (Min-Max scaling) applied to column(s): {', '.join(column_names)}.",
                 code="success",
             )
+            return self.dataset
         except KeyError:
             self.output.c_print(
                 "Error: One or more specified columns not found in the dataset.",
@@ -40,6 +41,7 @@ class FeatureScaling:
                 f"\nStandardization (Standard Scaler) applied to column(s): {', '.join(column_names)}.",
                 code="success",
             )
+            return self.dataset
         except KeyError:
             self.output.c_print(
                 "\nError: One or more specified columns not found in the dataset.",
