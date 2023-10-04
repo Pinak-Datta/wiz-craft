@@ -25,6 +25,11 @@ class EncodeCategoricalValues:
             self.dataset.drop(column_name, axis=1, inplace=True)
             self.dataset = pd.concat([self.dataset, encoded_column], axis=1)
             print(f"One-hot encoding applied for column '{column_name}'.")
+            # encoded_column = pd.get_dummies(self.dataset[column_name], prefix=column_name, drop_first=True)
+            # print(encoded_column)
+            # self.dataset.drop(column_name, axis=1, inplace=True)
+            # self.dataset = pd.concat([self.dataset, encoded_column], axis=1)
+            return self.dataset
         else:
             print(f"Error: Column '{column_name}' is not a categorical column. Cannot perform one-hot encoding.")
 
@@ -47,5 +52,5 @@ if __name__ == "__main__":
 
     categorical_encoder = EncodeCategoricalValues(df)
     categorical_encoder.show_categorical_columns()
-    categorical_encoder.perform_one_hot_encoding()
+    df=categorical_encoder.perform_one_hot_encoding()
     categorical_encoder.show_dataset()
