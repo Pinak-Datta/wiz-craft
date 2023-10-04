@@ -6,7 +6,7 @@ from wizcraft.io import Output
 
 class DownloadDataset:
     def __init__(self, dataset):
-        self.dataset = dataset  # .copy()
+        self.dataset = dataset
         self.output = Output()
 
     def download_dataset(self, filename):

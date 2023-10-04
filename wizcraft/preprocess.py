@@ -220,7 +220,7 @@ class Preprocess:
                     categorical_encoder.show_categorical_columns()
                 elif option == 2:
                     # column_name = input("Enter the column name to perform one-hot encoding: ")
-                    categorical_encoder.perform_one_hot_encoding()
+                    self.dataset=categorical_encoder.perform_one_hot_encoding()
                 elif option == 3:
                     categorical_encoder.show_dataset()
                 else:
@@ -247,14 +247,14 @@ class Preprocess:
                         "\nEnter the column name(s) to perform [underline]normalization[/underline] (comma-separated): "
                     )
                     column_names = [col.strip() for col in column_names.split(",")]
-                    feature_scaler.perform_normalization(column_names)
+                    self.dataset=feature_scaler.perform_normalization(column_names)
                 elif option == 2:
                     column_names = self.output.ask(
                         "\nEnter the column name(s) to perform [underline]standardization[/underline] ("
                         "comma-separated):"
                     )
                     column_names = [col.strip() for col in column_names.split(",")]
-                    feature_scaler.perform_standardization(column_names)
+                    self.dataset=feature_scaler.perform_standardization(column_names)
                 elif option == 3:
                     feature_scaler.show_dataset()
                 else:
