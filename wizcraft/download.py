@@ -5,7 +5,7 @@ import pandas as pd
 
 class DownloadDataset:
     def __init__(self, dataset):
-        self.dataset = dataset#.copy()
+        self.dataset = dataset
 
     def download_dataset(self, filename):
         try:
