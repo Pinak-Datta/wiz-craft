@@ -153,6 +153,10 @@ class Preprocess:
                 elif option == 5:
                     column_name = input("\nEnter the column name to fill with mode: ")
                     data_imputation.fill_null_with_mode(column_name)
+                elif option == 6:
+                    column_name = input("\nEnter the column name to fill with nearest neighbors: ")
+                    n_neighbors = int(input("\nEnter the value of 'K' in K-nearest neighbors: ")) 
+                    data_imputation.fill_null_with_nearest_neighbors(column_name, n_neighbors)
                 else:
                     print("Invalid option. Please choose a valid option.")
             except ValueError:
