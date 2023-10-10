@@ -3,6 +3,8 @@
 import pandas as pd
 from wizcraft.io import Output
 
+from sklearn.impute import KNNImputer
+import numpy as np
 
 class DataImputation:
     def __init__(self, dataset):
@@ -103,16 +105,32 @@ class DataImputation:
         )
 
         self.output.show_panel("Imputation tasks", content=options, color="blue")
+        self.dataset[column_name].fillna(self.dataset[column_name].mode().iloc[0], inplace=True)
+        print(f"\nNull values in column '{column_name}' filled with the mode.")
+    
+    def fill_null_with_nearest_neighbors(self, column_name, n_neighbors):
+        if column_name not in self.dataset.columns:
+            print(f"\nError: Column '{column_name}' not found in the dataset.")
+            return
 
+        if pd.api.types.is_numeric_dtype(self.dataset[column_name]):
+            imputer = KNNImputer(n_neighbors=n_neighbors)
+            imputed_values = imputer.fit_transform(self.dataset[[column_name]])
+            self.dataset[column_name] = imputed_values
+            print(f"\nNull values in column '{column_name}' filled with nearest neighbors.")
+        else:
+            print(f"\nError: Column '{column_name}' is not numeric. Cannot fill with nearest neighbors.")
 
-# if __name__ == "__main__":
-#     # For testing the DataImputation class
-#     df = pd.DataFrame({'NumericCol': [1, 2, None, 4, 5],
-#                        'StringCol': ['A', 'B', 'C', None, 'E']})
-#
-#     data_imputation = DataImputation(df)
-#     data_imputation.show_null_values_count()
-#     data_imputation.remove_column('StringCol')
-#     data_imputation.fill_null_with_mean('NumericCol')
-#     data_imputation.fill_null_with_median('NumericCol')
-#     data_imputation.fill_null_with_mode('StringCol')
+if __name__ == "__main__":
+    # For testing the DataImputation class
+    df = pd.DataFrame({'NumericCol': [1, 2, None, 4, 5],
+                       'StringCol': ['A', 'B', 'C', None, 'E']})
+
+    data_imputation = DataImputation(df)
+    # data_imputation.show_null_values_count()
+    # data_imputation.remove_column('StringCol')
+    # data_imputation.fill_null_with_mean('NumericCol')
+    # data_imputation.fill_null_with_median('NumericCol')
+    data_imputation.fill_null_with_nearest_neighbors('NumericCol', n_neighbors=2)
+    data_imputation.fill_null_with_mode('StringCol')
+    print(df)
