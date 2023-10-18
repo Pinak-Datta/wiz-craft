@@ -1,5 +1,7 @@
 <p align="center">
   <img src="https://svgshare.com/i/wCo.svg" alt="wizcraft-banner" />
+  
+
 </p>
 <p align="center">
   <a href="https://www.producthunt.com/posts/wizcraft?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-wizcraft" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=410900&theme=light" alt="WizCraft - CLI&#0032;tool&#0032;that&#0032;simplifies&#0032;the&#0032;process&#0032;of&#0032;data&#0032;pre&#0045;processing | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
@@ -8,6 +10,9 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT) 
 
 [![Downloads](https://static.pepy.tech/personalized-badge/wiz-craft?period=total&units=international_system&left_color=brightgreen&right_color=orange&left_text=Downloads)](https://pepy.tech/project/wiz-craft)
+
+![PyPI - Version](https://img.shields.io/pypi/v/wiz-craft)
+
 
 # WizCraft - CLI-Based Dataset Preprocessing Tool
 
@@ -58,7 +63,7 @@ WizCraft is a cutting-edge Command Line Interface (CLI) tool developed to simpli
 3. Follow the on-screen prompts to load your dataset, select target variables, and perform preprocessing tasks.
 
 <p align="center">
-  <img src="https://i.imgur.com/XFqQGrb.png" alt="wizcraft-cli_welcome" />
+  <img src="https://i.imgur.com/jYLwMN7.png" alt="wizcraft-cli_welcome" width = "600" height = "300" />
 </p>
 
 ## Features Available
@@ -66,7 +71,7 @@ WizCraft is a cutting-edge Command Line Interface (CLI) tool developed to simpli
 ### Data Description
 
 <p>
-  <img src="https://i.imgur.com/5sPHIaR.png" alt="data_description_preview" />
+  <img src="https://i.imgur.com/2CUMMoX.png" alt="data_description_preview" />
 </p>
 
 1. View statistics and properties of numeric columns.
@@ -76,7 +81,7 @@ WizCraft is a cutting-edge Command Line Interface (CLI) tool developed to simpli
 ### Handle Null Values
 
 <p>
-  <img src="https://i.imgur.com/mQVG1zu.png" alt="null_data_preview" />
+  <img src="https://i.imgur.com/JlkyQl5.png" alt="null_data_preview" />
 </p>
 
 1. Show NULL value counts in each column.
@@ -85,7 +90,7 @@ WizCraft is a cutting-edge Command Line Interface (CLI) tool developed to simpli
 ### Encode Categorical Values
 
 <p>
-  <img src="https://i.imgur.com/cgE9YU8.png" alt="one_hot_encode_preview" />
+  <img src="https://i.imgur.com/0gEfhpi.png" alt="one_hot_encode_preview" />
 </p>
 
 1. Identify and list categorical columns.
@@ -94,7 +99,7 @@ WizCraft is a cutting-edge Command Line Interface (CLI) tool developed to simpli
 ### Feature Scaling
 
 <p>
-  <img src="https://i.imgur.com/75JGb5X.png" alt="scaling_preview" />
+  <img src="https://i.imgur.com/kfpoXeG.png" alt="scaling_preview" />
 </p>
 
 1. Normalize (Min-Max scaling) or standardize (Standard Scaler) numerical columns.
@@ -102,18 +107,19 @@ WizCraft is a cutting-edge Command Line Interface (CLI) tool developed to simpli
 ### Save Preprocessed Dataset
 
 <p>
-  <img src="https://i.imgur.com/1v0Ra3s.png" alt="save_preview" />
+  <img src="https://i.imgur.com/1XywkGQ.png" alt="save_preview" />
 </p>
 
 1. Download the modified dataset with applied preprocessing steps.
 
 ## Future Works
 
+- [x] Advanced Data Imputation Techniques: Adding support for advanced data imputation techniques, such as K-nearest neighbours (KNN) imputation.
+- [x] Improved UI and UX using Rich 
+
 - [ ] Undo/Redo Option for each step
 
 - [ ] Extension for NLP tasks (like tokenization, stemming)
-
-- [ ] Advanced Data Imputation Techniques: Adding support for advanced data imputation techniques, such as K-nearest neighbours (KNN) imputation.
 
 - [ ] User-Friendly Interface: Improving the user interface to provide more interactive and user-friendly features, such as progress bars, error handling, and clear instructions.
 
