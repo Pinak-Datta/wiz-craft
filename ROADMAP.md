@@ -6,16 +6,17 @@ WizCraft is being rebuilt as a beginner-friendly CLI for cleaning tabular machin
 
 - Modern Python packaging with `pyproject.toml`
 - A real terminal command: `wizcraft`
-- Core tests for imputation, encoding, and scaling
+- Replayable preprocessing recipes
+- `wizcraft apply` for replaying recipes on future CSV files
+- Core tests for imputation, encoding, scaling, and recipe replay
 - Cleaner dependency metadata
 
 ## Next
 
-- Recipe export: save interactive preprocessing steps to JSON
-- Recipe replay: apply the same cleanup steps to another CSV
 - Non-interactive commands for automation
 - Dataset health report for nulls, duplicates, types, cardinality, and target balance
 - Better terminal tables and clearer validation errors
+- Better README examples and example datasets
 
 ## Later
 
@@ -23,7 +24,7 @@ WizCraft is being rebuilt as a beginner-friendly CLI for cleaning tabular machin
 - HTML report export
 - More encoders and imputers
 - Example datasets and tutorial notebooks
-- Plugin-style transformations
+- Plugin-style transformations for custom preprocessing steps
 
 ## Good First Issues
 

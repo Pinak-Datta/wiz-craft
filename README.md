@@ -35,7 +35,6 @@ WizCraft is a beginner-friendly Command Line Interface (CLI) tool for preparing 
   - [Feature Scaling](#feature-scaling)
   - [Save Preprocessed Dataset](#save-preprocessed-dataset)
 - [Replayable Recipes](#replayable-recipes)
-- [Future Works](#future-works)
 - [Roadmap](#roadmap)
 - [Contributing to the Project](#contribute-to-the-project)
 
@@ -155,26 +154,19 @@ Recipes currently support:
 - One-hot encoding categorical columns
 - Normalizing or standardizing numeric columns
 
-## Future Works
-
-- [x] Advanced Data Imputation Techniques: Adding support for advanced data imputation techniques, such as K-nearest neighbours (KNN) imputation.
-- [x] Improved UI and UX using Rich 
-
-- [ ] Undo/Redo Option for each step
-
-- [ ] Extension for NLP tasks (like tokenization, stemming)
-
-- [x] Recipe export so users can save and replay preprocessing steps.
-
-- [ ] Non-interactive CLI commands for automation and notebooks.
-
-- [ ] User-Friendly Interface: Improving the user interface to provide more interactive and user-friendly features, such as progress bars, error handling, and clear instructions.
-
-- [ ] Using Curses for terminal Manipulation.
-
 ## Roadmap
 
-WizCraft is being rebuilt around two ideas: a friendly first-time CLI and repeatable preprocessing recipes. See [ROADMAP.md](ROADMAP.md) for the current direction and good first issue ideas.
+WizCraft is being rebuilt around two ideas: a friendly first-time CLI and repeatable preprocessing recipes.
+
+Current priorities:
+
+- Non-interactive commands for automation and notebooks.
+- Dataset health reports for nulls, duplicates, types, cardinality, and target balance.
+- Exportable scikit-learn preprocessing pipelines.
+- Cleaner terminal tables, validation, and error messages.
+- Example datasets, tutorials, and good first issues for new contributors.
+
+See [ROADMAP.md](ROADMAP.md) for the full direction.
 
 ## Contributing to the Project
 **Check out the [Contribution Guide](https://github.com/wiz-craft/wiz-craft/blob/main/CONTRIBUTING.md) if you want to contribute to this project**
