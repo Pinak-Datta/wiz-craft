@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from typing import Optional
 
 import pandas as pd
 from rich.console import Console
@@ -12,6 +13,7 @@ from wizcraft.recipe import Recipe
 class DoctorIssue:
     severity: str
     column: str
+    category: str
     message: str
     suggestion: str
 
@@ -23,10 +25,10 @@ class DoctorReport:
     columns: int
     score: int
     issues: list[DoctorIssue] = field(default_factory=list)
-    recipe: Recipe | None = None
+    recipe: Optional[Recipe] = None
 
 
-def inspect_dataset(csv_file, target=None, missing_drop_threshold=0.8):
+def inspect_dataset(csv_file, target=None, missing_drop_threshold=0.5):
     dataset = pd.read_csv(csv_file)
     issues = []
     recipe = Recipe(input_file=str(csv_file), target_variable=target)
@@ -56,19 +58,52 @@ def write_recipe(report, output_path):
 
 def render_report(report):
     console = Console()
-    title = f"Dataset Health Score: {report.score}/100"
-    summary = f"{report.rows:,} rows x {report.columns:,} columns\n{report.csv_file}"
-    console.print(Panel(summary, title=title, border_style=_score_color(report.score)))
+    score_color = _score_color(report.score)
+    status = _score_status(report.score)
+    summary = "\n".join(
+        [
+            f"[bold]{report.csv_file}[/bold]",
+            f"{report.rows:,} rows x {report.columns:,} columns",
+            f"Status: [{score_color}]{status}[/{score_color}]",
+        ]
+    )
+    console.print(
+        Panel(
+            summary,
+            title=f"Dataset Health Score: {report.score}/100",
+            border_style=score_color,
+        )
+    )
 
     if not report.issues:
         console.print("[green]No major issues found.[/green]")
         return
 
-    table = Table(title="Doctor Findings")
+    console.print(_build_summary_table(report))
+
+    if report.recipe and report.recipe.steps:
+        recipe_table = Table(title="Suggested Cleaning Recipe (Safe Auto-Fixes)")
+        recipe_table.add_column("#", justify="right", style="dim")
+        recipe_table.add_column("Action", style="bold green")
+        recipe_table.add_column("Detail")
+        for index, step in enumerate(report.recipe.steps, 1):
+            recipe_table.add_row(
+                str(index),
+                _format_action(step["action"]),
+                _format_params(step.get("params", {})),
+            )
+        console.print(recipe_table)
+        console.print(
+            "[dim]Save this recipe with --write-recipe, then run it with wizcraft apply.[/dim]"
+        )
+    else:
+        console.print("[yellow]No safe automatic recipe steps were suggested.[/yellow]")
+
+    table = Table(title="Findings That Need Attention")
     table.add_column("Severity", style="bold")
     table.add_column("Column")
-    table.add_column("Issue")
-    table.add_column("Suggestion")
+    table.add_column("Finding")
+    table.add_column("Next step")
 
     for issue in report.issues:
         table.add_row(
@@ -80,21 +115,6 @@ def render_report(report):
 
     console.print(table)
 
-    if report.recipe and report.recipe.steps:
-        recipe_table = Table(title="Suggested Recipe Steps")
-        recipe_table.add_column("#", justify="right")
-        recipe_table.add_column("Action")
-        recipe_table.add_column("Parameters")
-        for index, step in enumerate(report.recipe.steps, 1):
-            recipe_table.add_row(
-                str(index),
-                step["action"],
-                ", ".join(
-                    f"{key}={value}" for key, value in step.get("params", {}).items()
-                ),
-            )
-        console.print(recipe_table)
-
 
 def _inspect_duplicate_rows(dataset, issues):
     duplicate_count = int(dataset.duplicated().sum())
@@ -103,8 +123,9 @@ def _inspect_duplicate_rows(dataset, issues):
             DoctorIssue(
                 severity="medium",
                 column="",
+                category="Duplicates",
                 message=f"{duplicate_count:,} duplicate row(s) found.",
-                suggestion="Review duplicates before model training.",
+                suggestion="Review or remove duplicates.",
             )
         )
 
@@ -121,8 +142,9 @@ def _inspect_missing_values(dataset, issues, recipe, missing_drop_threshold):
                 DoctorIssue(
                     severity="high",
                     column=column,
+                    category="Missing",
                     message=f"{missing_rate:.1%} missing values.",
-                    suggestion="Consider dropping this column or collecting better data.",
+                    suggestion="Review before auto-fixing.",
                 )
             )
             continue
@@ -137,8 +159,9 @@ def _inspect_missing_values(dataset, issues, recipe, missing_drop_threshold):
             DoctorIssue(
                 severity="medium",
                 column=column,
+                category="Missing",
                 message=f"{missing_count:,} missing value(s).",
-                suggestion=f"Fill missing values with {method}.",
+                suggestion=f"Fill with {method}.",
             )
         )
 
@@ -161,8 +184,9 @@ def _inspect_id_like_columns(dataset, issues, recipe, target):
                 DoctorIssue(
                     severity="low",
                     column=column,
+                    category="Identifier",
                     message="Column looks like an identifier.",
-                    suggestion="Drop it before model training unless it carries signal.",
+                    suggestion="Drop unless it carries signal.",
                 )
             )
 
@@ -171,7 +195,7 @@ def _inspect_categorical_columns(dataset, issues, recipe, target):
     for column in dataset.select_dtypes(include=["object", "category", "bool"]).columns:
         if column == target:
             continue
-        if dataset[column].isna().mean() >= 0.8:
+        if dataset[column].isna().mean() >= 0.5:
             continue
 
         cardinality = int(dataset[column].nunique(dropna=True))
@@ -180,8 +204,9 @@ def _inspect_categorical_columns(dataset, issues, recipe, target):
                 DoctorIssue(
                     severity="medium",
                     column=column,
+                    category="Categorical",
                     message="Column has one or fewer distinct values.",
-                    suggestion="Consider dropping this low-information column.",
+                    suggestion="Consider dropping it.",
                 )
             )
         elif cardinality <= 20:
@@ -190,8 +215,9 @@ def _inspect_categorical_columns(dataset, issues, recipe, target):
                 DoctorIssue(
                     severity="low",
                     column=column,
+                    category="Categorical",
                     message=f"Categorical column with {cardinality} distinct value(s).",
-                    suggestion="One-hot encode this column.",
+                    suggestion="One-hot encode.",
                 )
             )
         else:
@@ -199,8 +225,9 @@ def _inspect_categorical_columns(dataset, issues, recipe, target):
                 DoctorIssue(
                     severity="medium",
                     column=column,
+                    category="Categorical",
                     message=f"High-cardinality categorical column with {cardinality} distinct value(s).",
-                    suggestion="Review before encoding; one-hot encoding may create too many columns.",
+                    suggestion="Review before encoding.",
                 )
             )
 
@@ -231,8 +258,9 @@ def _inspect_numeric_outliers(dataset, issues, target):
                 DoctorIssue(
                     severity="low",
                     column=column,
+                    category="Outliers",
                     message=f"{outlier_count:,} potential outlier(s) by IQR.",
-                    suggestion="Review outliers; consider clipping or robust scaling.",
+                    suggestion="Review or cap outliers.",
                 )
             )
 
@@ -246,8 +274,9 @@ def _inspect_target(dataset, issues, target):
             DoctorIssue(
                 severity="high",
                 column=target,
+                category="Target",
                 message="Target column was not found.",
-                suggestion="Check the --target value.",
+                suggestion="Check --target.",
             )
         )
         return
@@ -258,8 +287,9 @@ def _inspect_target(dataset, issues, target):
             DoctorIssue(
                 severity="high",
                 column=target,
+                category="Target",
                 message="Target column has no non-null values.",
-                suggestion="Choose another target or fix the source data.",
+                suggestion="Choose another target.",
             )
         )
         return
@@ -272,8 +302,9 @@ def _inspect_target(dataset, issues, target):
                 DoctorIssue(
                     severity="medium",
                     column=target,
+                    category="Target",
                     message=f"Target is imbalanced: top class is {majority_rate:.1%}.",
-                    suggestion="Use stratified splits and appropriate metrics.",
+                    suggestion="Use stratified splits.",
                 )
             )
 
@@ -296,6 +327,48 @@ def _score_color(score):
     if score >= 60:
         return "yellow"
     return "red"
+
+
+def _score_status(score):
+    if score >= 80:
+        return "Ready for preprocessing"
+    if score >= 60:
+        return "Usable with cleanup"
+    return "Needs review before modeling"
+
+
+def _build_summary_table(report):
+    severity_counts = {"high": 0, "medium": 0, "low": 0}
+    categories = set()
+    for issue in report.issues:
+        severity_counts[issue.severity] += 1
+        categories.add(issue.category)
+
+    table = Table(title="Audit Summary")
+    table.add_column("Metric", style="bold")
+    table.add_column("Value")
+    table.add_row("High severity", str(severity_counts["high"]))
+    table.add_row("Medium severity", str(severity_counts["medium"]))
+    table.add_row("Low severity", str(severity_counts["low"]))
+    table.add_row("Issue categories", ", ".join(sorted(categories)) or "-")
+    table.add_row("Suggested recipe steps", str(len(report.recipe.steps)))
+    return table
+
+
+def _format_action(action):
+    return action.replace("_", " ").title()
+
+
+def _format_params(params):
+    if "column" in params and "method" in params:
+        return f"{params['column']} -> {params['method']}"
+    if "column" in params and "drop_first" in params:
+        return f"{params['column']} -> one-hot encode"
+    if "column" in params:
+        return str(params["column"])
+    if "columns" in params and "method" in params:
+        return f"{', '.join(params['columns'])} -> {params['method']}"
+    return ", ".join(f"{key}={value}" for key, value in params.items())
 
 
 def _format_severity(severity):

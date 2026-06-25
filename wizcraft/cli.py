@@ -55,7 +55,7 @@ def build_doctor_parser():
     parser.add_argument(
         "--missing-drop-threshold",
         type=float,
-        default=0.8,
+        default=0.5,
         help="Missing-value rate at which a column is flagged for review instead of imputation.",
     )
     return parser
