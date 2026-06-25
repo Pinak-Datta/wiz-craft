@@ -1,7 +1,15 @@
 import argparse
+import json
 import sys
 
-from wizcraft.doctor import inspect_dataset, render_report, write_recipe
+from wizcraft.doctor import (
+    inspect_dataset,
+    render_report,
+    report_to_dict,
+    write_html_report,
+    write_json_report,
+    write_recipe,
+)
 from wizcraft.preprocess import Preprocess
 from wizcraft.recipe import apply_recipe
 
@@ -53,6 +61,20 @@ def build_doctor_parser():
         help="Write the suggested preprocessing recipe to this JSON file.",
     )
     parser.add_argument(
+        "--format",
+        choices=["text", "json"],
+        default="text",
+        help="Output format for stdout.",
+    )
+    parser.add_argument(
+        "--json",
+        help="Write the full doctor report to a JSON file.",
+    )
+    parser.add_argument(
+        "--html",
+        help="Write the doctor report to an HTML file.",
+    )
+    parser.add_argument(
         "--missing-drop-threshold",
         type=float,
         default=0.5,
@@ -78,10 +100,19 @@ def main(argv=None):
             target=args.target,
             missing_drop_threshold=args.missing_drop_threshold,
         )
-        render_report(report)
+        if args.format == "json":
+            print(json.dumps(report_to_dict(report), indent=2))
+        else:
+            render_report(report)
         if args.write_recipe:
             write_recipe(report, args.write_recipe)
-            print(f"Recipe saved to {args.write_recipe}")
+            print(f"Recipe saved to {args.write_recipe}", file=sys.stderr)
+        if args.json:
+            write_json_report(report, args.json)
+            print(f"JSON report saved to {args.json}", file=sys.stderr)
+        if args.html:
+            write_html_report(report, args.html)
+            print(f"HTML report saved to {args.html}", file=sys.stderr)
         return 0
 
     parser = build_parser()

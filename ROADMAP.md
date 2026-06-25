@@ -8,14 +8,14 @@ WizCraft is being rebuilt as a beginner-friendly CLI for auditing and cleaning t
 - A real terminal command: `wizcraft`
 - Replayable preprocessing recipes
 - `wizcraft apply` for replaying recipes on future CSV files
-- `wizcraft doctor` for dataset health checks and suggested recipes
+- `wizcraft doctor` for dataset health checks, column type inference, task detection, leakage warnings, and suggested recipes
+- JSON and HTML exports for Doctor reports
 - Core tests for imputation, encoding, scaling, recipe replay, and dataset doctor
 - Cleaner dependency metadata
 
 ## Next
 
 - Non-interactive commands for automation
-- HTML dataset health report export
 - Better terminal tables and clearer validation errors
 - Better README examples and example datasets
 

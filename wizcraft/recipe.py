@@ -14,8 +14,11 @@ class Recipe:
         self.target_variable = target_variable
         self.steps = steps or []
 
-    def add_step(self, action, **params):
-        self.steps.append({"action": action, "params": params})
+    def add_step(self, action, confidence=None, **params):
+        step = {"action": action, "params": params}
+        if confidence is not None:
+            step["confidence"] = confidence
+        self.steps.append(step)
 
     def to_dict(self):
         return {

@@ -49,7 +49,7 @@ WizCraft is a beginner-friendly Command Line Interface (CLI) tool for preparing 
 - Normalize and standardize numerical features for better model performance.
 - Download the preprocessed dataset with your desired modifications.
 - Save preprocessing recipes and replay them on future CSV files.
-- Audit datasets with `wizcraft doctor` and generate suggested cleaning recipes.
+- Audit datasets with `wizcraft doctor`, detect modeling risks, and generate suggested cleaning recipes.
 
 ## Getting Started
 
@@ -90,6 +90,12 @@ Audit a dataset and generate a suggested recipe:
 wizcraft doctor train.csv --target Survived --write-recipe recipe.json
 ```
 
+Export the same audit as JSON or HTML:
+
+```bash
+wizcraft doctor train.csv --target Survived --json report.json --html report.html
+```
+
 Replay a saved recipe on another CSV:
 
 ```bash
@@ -110,18 +116,30 @@ wizcraft doctor train.csv --target Survived
 
 The doctor currently checks for:
 
+- Column types, including numeric, categorical, datetime, text-like, ID-like, and mostly-empty columns
 - Missing values
 - Duplicate rows
 - ID-like columns
+- Constant and near-constant columns
 - Categorical columns that need encoding
+- Date/datetime columns that may need feature extraction
 - Numeric outliers using the IQR rule
 - Imbalanced target columns
+- Likely modeling task: binary classification, multiclass classification, or regression
+- Possible target leakage from suspicious names or highly target-correlated numeric columns
 
-You can also write a suggested recipe and apply it later:
+You can write a suggested recipe and apply it later:
 
 ```bash
 wizcraft doctor train.csv --target Survived --write-recipe recipe.json
 wizcraft apply train.csv --recipe recipe.json --out train-clean.csv
+```
+
+You can also use Doctor output in automation:
+
+```bash
+wizcraft doctor train.csv --target Survived --format json
+wizcraft doctor train.csv --target Survived --html report.html
 ```
 
 ## Features Available
@@ -193,7 +211,6 @@ WizCraft is being rebuilt around three ideas: a friendly first-time CLI, dataset
 Current priorities:
 
 - Non-interactive commands for automation and notebooks.
-- HTML dataset health reports.
 - Exportable scikit-learn preprocessing pipelines.
 - Cleaner terminal tables, validation, and error messages.
 - Example datasets, tutorials, and good first issues for new contributors.
