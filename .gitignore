@@ -5,4 +5,5 @@ __pycache__/
 .venv/
 build/
 dist/
+work/
 *.csv

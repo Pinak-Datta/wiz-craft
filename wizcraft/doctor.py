@@ -56,8 +56,8 @@ def write_recipe(report, output_path):
     return output_path
 
 
-def render_report(report):
-    console = Console()
+def render_report(report, console=None):
+    console = console or Console()
     score_color = _score_color(report.score)
     status = _score_status(report.score)
     summary = "\n".join(
