@@ -1,6 +1,6 @@
 # WizCraft Roadmap
 
-WizCraft is being rebuilt as a beginner-friendly CLI for cleaning tabular machine-learning datasets. The goal is to make the first run delightful, then make every preprocessing step repeatable.
+WizCraft is being rebuilt as a beginner-friendly CLI for auditing and cleaning tabular machine-learning datasets. The goal is to make the first run delightful, then make every preprocessing step repeatable.
 
 ## Now
 
@@ -8,13 +8,14 @@ WizCraft is being rebuilt as a beginner-friendly CLI for cleaning tabular machin
 - A real terminal command: `wizcraft`
 - Replayable preprocessing recipes
 - `wizcraft apply` for replaying recipes on future CSV files
-- Core tests for imputation, encoding, scaling, and recipe replay
+- `wizcraft doctor` for dataset health checks and suggested recipes
+- Core tests for imputation, encoding, scaling, recipe replay, and dataset doctor
 - Cleaner dependency metadata
 
 ## Next
 
 - Non-interactive commands for automation
-- Dataset health report for nulls, duplicates, types, cardinality, and target balance
+- HTML dataset health report export
 - Better terminal tables and clearer validation errors
 - Better README examples and example datasets
 

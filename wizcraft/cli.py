@@ -1,6 +1,7 @@
 import argparse
 import sys
 
+from wizcraft.doctor import inspect_dataset, render_report, write_recipe
 from wizcraft.preprocess import Preprocess
 from wizcraft.recipe import apply_recipe
 
@@ -37,6 +38,29 @@ def build_apply_parser():
     return parser
 
 
+def build_doctor_parser():
+    parser = argparse.ArgumentParser(
+        prog="wizcraft doctor",
+        description="Audit a CSV dataset and suggest preprocessing fixes.",
+    )
+    parser.add_argument("csv_file", help="Path to the CSV file to inspect.")
+    parser.add_argument(
+        "--target",
+        help="Optional target column for target-aware checks.",
+    )
+    parser.add_argument(
+        "--write-recipe",
+        help="Write the suggested preprocessing recipe to this JSON file.",
+    )
+    parser.add_argument(
+        "--missing-drop-threshold",
+        type=float,
+        default=0.8,
+        help="Missing-value rate at which a column is flagged for review instead of imputation.",
+    )
+    return parser
+
+
 def main(argv=None):
     argv = list(sys.argv[1:] if argv is None else argv)
     if argv and argv[0] == "apply":
@@ -44,6 +68,20 @@ def main(argv=None):
         args = parser.parse_args(argv[1:])
         apply_recipe(args.csv_file, args.recipe, args.out)
         print(f"Dataset saved to {args.out}")
+        return 0
+
+    if argv and argv[0] == "doctor":
+        parser = build_doctor_parser()
+        args = parser.parse_args(argv[1:])
+        report = inspect_dataset(
+            args.csv_file,
+            target=args.target,
+            missing_drop_threshold=args.missing_drop_threshold,
+        )
+        render_report(report)
+        if args.write_recipe:
+            write_recipe(report, args.write_recipe)
+            print(f"Recipe saved to {args.write_recipe}")
         return 0
 
     parser = build_parser()

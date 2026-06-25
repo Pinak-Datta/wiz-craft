@@ -17,7 +17,7 @@
 
 # WizCraft - CLI-Based Dataset Preprocessing Tool
 
-WizCraft is a beginner-friendly Command Line Interface (CLI) tool for preparing tabular datasets for machine learning. It helps you inspect a CSV, handle missing values, encode categorical columns, scale numeric features, save a cleaned dataset, and export replayable preprocessing recipes.
+WizCraft is a beginner-friendly Command Line Interface (CLI) tool for preparing tabular datasets for machine learning. It helps you inspect a CSV, diagnose data quality issues, handle missing values, encode categorical columns, scale numeric features, save a cleaned dataset, and export replayable preprocessing recipes.
 
 **[Try the tool online here](https://replit.com/@PinakDatta/DataWiz)**
 
@@ -28,6 +28,7 @@ WizCraft is a beginner-friendly Command Line Interface (CLI) tool for preparing 
 - [Features](#features)
 - [Getting Started](#getting-started)
   - [Installation](#installation)
+- [Dataset Doctor](#dataset-doctor)
 - [Tasks](#tasks)
   - [Data Description](#data-description)
   - [Handle Null Values](#handle-null-values)
@@ -48,6 +49,7 @@ WizCraft is a beginner-friendly Command Line Interface (CLI) tool for preparing 
 - Normalize and standardize numerical features for better model performance.
 - Download the preprocessed dataset with your desired modifications.
 - Save preprocessing recipes and replay them on future CSV files.
+- Audit datasets with `wizcraft doctor` and generate suggested cleaning recipes.
 
 ## Getting Started
 
@@ -82,6 +84,12 @@ wiz_obj.start()
 
 Follow the on-screen prompts to select the target variable and perform preprocessing tasks.
 
+Audit a dataset and generate a suggested recipe:
+
+```bash
+wizcraft doctor train.csv --target Survived --write-recipe recipe.json
+```
+
 Replay a saved recipe on another CSV:
 
 ```bash
@@ -91,6 +99,30 @@ wizcraft apply new-data.csv --recipe cleaned.recipe.json --out new-data-clean.cs
 <p align="center">
   <img src="https://i.imgur.com/jYLwMN7.png" alt="wizcraft-cli_welcome" width = "600" height = "300" />
 </p>
+
+## Dataset Doctor
+
+`wizcraft doctor` audits a CSV and surfaces common machine-learning data quality issues before you start modeling:
+
+```bash
+wizcraft doctor train.csv --target Survived
+```
+
+The doctor currently checks for:
+
+- Missing values
+- Duplicate rows
+- ID-like columns
+- Categorical columns that need encoding
+- Numeric outliers using the IQR rule
+- Imbalanced target columns
+
+You can also write a suggested recipe and apply it later:
+
+```bash
+wizcraft doctor train.csv --target Survived --write-recipe recipe.json
+wizcraft apply train.csv --recipe recipe.json --out train-clean.csv
+```
 
 ## Features Available
 
@@ -156,12 +188,12 @@ Recipes currently support:
 
 ## Roadmap
 
-WizCraft is being rebuilt around two ideas: a friendly first-time CLI and repeatable preprocessing recipes.
+WizCraft is being rebuilt around three ideas: a friendly first-time CLI, dataset health checks, and repeatable preprocessing recipes.
 
 Current priorities:
 
 - Non-interactive commands for automation and notebooks.
-- Dataset health reports for nulls, duplicates, types, cardinality, and target balance.
+- HTML dataset health reports.
 - Exportable scikit-learn preprocessing pipelines.
 - Cleaner terminal tables, validation, and error messages.
 - Example datasets, tutorials, and good first issues for new contributors.

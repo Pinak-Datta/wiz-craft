@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "wiz-craft"
-version = "1.2.1"
-description = "A beginner-friendly CLI for preprocessing tabular ML datasets with replayable recipes."
+version = "1.3.0"
+description = "A beginner-friendly CLI for auditing and preprocessing tabular ML datasets."
 readme = "README.md"
 requires-python = ">=3.9"
 license = "MIT"
