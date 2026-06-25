@@ -9,13 +9,16 @@ from wizcraft.download import DownloadDataset
 from wizcraft.feature_selection import FeatureScaling
 from wizcraft.imputation import DataImputation
 from wizcraft.io import Output, print_splash
+from wizcraft.recipe import Recipe
 
 
 class Preprocess:
-    def __init__(self):
+    def __init__(self, csv_file=None):
         self.original_dataset = None
         self.dataset = None
         self.target_variable = None
+        self.csv_file = csv_file
+        self.recipe = Recipe(input_file=csv_file)
         self.output = Output()
 
     # @staticmethod
@@ -45,10 +48,15 @@ class Preprocess:
     def load_dataset_from_command_line(self):
         # Function to load the dataset from the command line
         try:
+            if self.csv_file:
+                self.load_dataset(self.csv_file)
+                return
+
+            csv_files = self.get_csvs()
             file_path = self.output.ask(
                 "Enter the path of the CSV file",
                 # default=self.get_csvs()[0],
-                choices=self.get_csvs(),
+                choices=csv_files or None,
                 color="blue",
             )
             self.load_dataset(file_path)
@@ -59,6 +67,7 @@ class Preprocess:
         try:
             # self.original_dataset = pd.read_csv(csv_file)
             self.dataset = pd.read_csv(csv_file)
+            self.recipe.input_file = csv_file
             # self.dataset = self.original_dataset
             self.output.c_print("Dataset loaded [green]successfully[/green]\n")
         except FileNotFoundError:
@@ -99,6 +108,7 @@ class Preprocess:
                 sys.exit("\nExiting the program....")
             elif target_idx in range(len(self.dataset.columns)):
                 self.target_variable = self.dataset.columns[target_idx]
+                self.recipe.target_variable = self.target_variable
                 self.output.c_print(
                     f"Target [underline]variable[/underline] [blue]{self.target_variable}[/blue] chose\n"
                 )
@@ -188,19 +198,41 @@ class Preprocess:
                 elif option == 2:
                     column_name = input("\nEnter the column name to remove: ")
                     data_imputation.remove_column(column_name)
+                    self.recipe.add_step("remove_column", column=column_name)
                 elif option == 3:
                     column_name = input("\nEnter the column name to fill with mean: ")
                     data_imputation.fill_null_with_mean(column_name)
+                    self.recipe.add_step(
+                        "fill_null", column=column_name, method="mean"
+                    )
                 elif option == 4:
                     column_name = input("\nEnter the column name to fill with median: ")
                     data_imputation.fill_null_with_median(column_name)
+                    self.recipe.add_step(
+                        "fill_null", column=column_name, method="median"
+                    )
                 elif option == 5:
                     column_name = input("\nEnter the column name to fill with mode: ")
                     data_imputation.fill_null_with_mode(column_name)
+                    self.recipe.add_step(
+                        "fill_null", column=column_name, method="mode"
+                    )
                 elif option == 6:
-                    column_name = input("\nEnter the column name to fill with nearest neighbors: ")
-                    n_neighbors = int(input("\nEnter the value of 'K' in K-nearest neighbors: ")) 
-                    data_imputation.fill_null_with_nearest_neighbors(column_name, n_neighbors)
+                    column_name = input(
+                        "\nEnter the column name to fill with nearest neighbors: "
+                    )
+                    n_neighbors = int(
+                        input("\nEnter the value of 'K' in K-nearest neighbors: ")
+                    )
+                    data_imputation.fill_null_with_nearest_neighbors(
+                        column_name, n_neighbors
+                    )
+                    self.recipe.add_step(
+                        "fill_null",
+                        column=column_name,
+                        method="knn",
+                        n_neighbors=n_neighbors,
+                    )
                 else:
                     print("Invalid option. Please choose a valid option.")
             except ValueError:
@@ -223,8 +255,16 @@ class Preprocess:
                 if option == 1:
                     categorical_encoder.show_categorical_columns()
                 elif option == 2:
-                    # column_name = input("Enter the column name to perform one-hot encoding: ")
-                    self.dataset=categorical_encoder.perform_one_hot_encoding()
+                    column_name = self.output.ask(
+                        "\nEnter the column name to perform one-hot encoding",
+                        color="yellow",
+                    )
+                    self.dataset = categorical_encoder.perform_one_hot_encoding(
+                        column_name
+                    )
+                    self.recipe.add_step(
+                        "one_hot_encode", column=column_name, drop_first=True
+                    )
                 elif option == 3:
                     categorical_encoder.show_dataset()
                 else:
@@ -251,14 +291,20 @@ class Preprocess:
                         "\nEnter the column name(s) to perform [underline]normalization[/underline] (comma-separated): "
                     )
                     column_names = [col.strip() for col in column_names.split(",")]
-                    self.dataset=feature_scaler.perform_normalization(column_names)
+                    self.dataset = feature_scaler.perform_normalization(column_names)
+                    self.recipe.add_step(
+                        "scale", columns=column_names, method="normalize"
+                    )
                 elif option == 2:
                     column_names = self.output.ask(
                         "\nEnter the column name(s) to perform [underline]standardization[/underline] ("
                         "comma-separated):"
                     )
                     column_names = [col.strip() for col in column_names.split(",")]
-                    self.dataset=feature_scaler.perform_standardization(column_names)
+                    self.dataset = feature_scaler.perform_standardization(column_names)
+                    self.recipe.add_step(
+                        "scale", columns=column_names, method="standardize"
+                    )
                 elif option == 3:
                     feature_scaler.show_dataset()
                 else:
@@ -282,11 +328,31 @@ class Preprocess:
                 )
             else:
                 download_obj.download_dataset(filename)
+                self.save_recipe_if_requested(filename)
         else:
             self.output.c_print(
                 "Error: Dataset is not loaded. Please load the dataset first using 'load_dataset' function.",
                 code="danger",
             )
+
+    def save_recipe_if_requested(self, dataset_filename):
+        if not self.recipe.steps:
+            return
+
+        should_save = self.output.confirm(
+            "Save a replayable preprocessing recipe?", default=True
+        )
+        if not should_save:
+            return
+
+        recipe_filename = self.output.ask(
+            "Recipe file name",
+            default=f"{dataset_filename}.recipe.json",
+        )
+        self.recipe.save(recipe_filename)
+        self.output.c_print(
+            f"Recipe saved successfully as '{recipe_filename}'", code="success"
+        )
 
 
 if __name__ == "__main__":

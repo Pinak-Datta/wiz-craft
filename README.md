@@ -8,6 +8,7 @@
 </p>
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT) 
+[![CI](https://github.com/wiz-craft/wiz-craft/actions/workflows/ci.yml/badge.svg)](https://github.com/wiz-craft/wiz-craft/actions/workflows/ci.yml)
 
 [![Downloads](https://static.pepy.tech/personalized-badge/wiz-craft?period=total&units=international_system&left_color=brightgreen&right_color=orange&left_text=Downloads)](https://pepy.tech/project/wiz-craft)
 
@@ -16,11 +17,11 @@
 
 # WizCraft - CLI-Based Dataset Preprocessing Tool
 
-WizCraft is a cutting-edge Command Line Interface (CLI) tool developed to simplify the process of dataset preprocessing for machine learning tasks. It aims to provide a seamless and efficient experience for data scientists of all levels, facilitating the preparation of data for various machine-learning applications.
+WizCraft is a beginner-friendly Command Line Interface (CLI) tool for preparing tabular datasets for machine learning. It helps you inspect a CSV, handle missing values, encode categorical columns, scale numeric features, save a cleaned dataset, and export replayable preprocessing recipes.
 
 **[Try the tool online here](https://replit.com/@PinakDatta/DataWiz)**
 
-**Check out the [Contribution Guide](https://github.com/Pinak-Datta/wiz-craft/blob/main/CONTRIBUTING.md) if you want to Contribute to this project**
+**Check out the [Contribution Guide](https://github.com/wiz-craft/wiz-craft/blob/main/CONTRIBUTING.md) if you want to contribute to this project**
 
 ## Table of Contents
 
@@ -33,7 +34,9 @@ WizCraft is a cutting-edge Command Line Interface (CLI) tool developed to simpli
   - [Encode Categorical Values](#encode-categorical-values)
   - [Feature Scaling](#feature-scaling)
   - [Save Preprocessed Dataset](#save-preprocessed-dataset)
+- [Replayable Recipes](#replayable-recipes)
 - [Future Works](#future-works)
+- [Roadmap](#roadmap)
 - [Contributing to the Project](#contribute-to-the-project)
 
 
@@ -45,22 +48,46 @@ WizCraft is a cutting-edge Command Line Interface (CLI) tool developed to simpli
 - Encode categorical variables using one-hot encoding.
 - Normalize and standardize numerical features for better model performance.
 - Download the preprocessed dataset with your desired modifications.
+- Save preprocessing recipes and replay them on future CSV files.
 
 ## Getting Started
 
 ### Installation
 
-1. Run the pip command:
-   ```bash
-   pip install wiz-craft
+Install WizCraft from PyPI:
 
-2. To use the module, use the commands:
-    ```python
-    from wizcraft.preprocess import Preprocess
-    wiz_obj = Preprocess()
-    wiz_obj.start()  
+```bash
+pip install wiz-craft
+```
 
-3. Follow the on-screen prompts to load your dataset, select target variables, and perform preprocessing tasks.
+Start the interactive CLI with a CSV file:
+
+```bash
+wizcraft dataset.csv
+```
+
+You can also launch WizCraft and choose a CSV from the current directory:
+
+```bash
+wizcraft
+```
+
+WizCraft can still be used from Python:
+
+```python
+from wizcraft.preprocess import Preprocess
+
+wiz_obj = Preprocess(csv_file="dataset.csv")
+wiz_obj.start()
+```
+
+Follow the on-screen prompts to select the target variable and perform preprocessing tasks.
+
+Replay a saved recipe on another CSV:
+
+```bash
+wizcraft apply new-data.csv --recipe cleaned.recipe.json --out new-data-clean.csv
+```
 
 <p align="center">
   <img src="https://i.imgur.com/jYLwMN7.png" alt="wizcraft-cli_welcome" width = "600" height = "300" />
@@ -85,7 +112,7 @@ WizCraft is a cutting-edge Command Line Interface (CLI) tool developed to simpli
 </p>
 
 1. Show NULL value counts in each column.
-2. Remove specific columns or fill NULL values with mean, median, or mode.
+2. Remove specific columns or fill NULL values with mean, median, mode, or K-nearest neighbors.
 
 ### Encode Categorical Values
 
@@ -111,6 +138,22 @@ WizCraft is a cutting-edge Command Line Interface (CLI) tool developed to simpli
 </p>
 
 1. Download the modified dataset with applied preprocessing steps.
+2. Save a replayable `.recipe.json` file for the same preprocessing flow.
+
+## Replayable Recipes
+
+WizCraft can now save the preprocessing steps you perform interactively. A recipe is a small JSON file that can be applied again later:
+
+```bash
+wizcraft apply raw-data.csv --recipe cleaned.recipe.json --out cleaned-data.csv
+```
+
+Recipes currently support:
+
+- Removing columns
+- Filling null values with mean, median, mode, or K-nearest neighbors
+- One-hot encoding categorical columns
+- Normalizing or standardizing numeric columns
 
 ## Future Works
 
@@ -121,9 +164,17 @@ WizCraft is a cutting-edge Command Line Interface (CLI) tool developed to simpli
 
 - [ ] Extension for NLP tasks (like tokenization, stemming)
 
+- [x] Recipe export so users can save and replay preprocessing steps.
+
+- [ ] Non-interactive CLI commands for automation and notebooks.
+
 - [ ] User-Friendly Interface: Improving the user interface to provide more interactive and user-friendly features, such as progress bars, error handling, and clear instructions.
 
 - [ ] Using Curses for terminal Manipulation.
 
+## Roadmap
+
+WizCraft is being rebuilt around two ideas: a friendly first-time CLI and repeatable preprocessing recipes. See [ROADMAP.md](ROADMAP.md) for the current direction and good first issue ideas.
+
 ## Contributing to the Project
-**Check out the [Contribution Guide](https://github.com/Pinak-Datta/wiz-craft/blob/main/CONTRIBUTING.md) if you want to contribute to this project**
+**Check out the [Contribution Guide](https://github.com/wiz-craft/wiz-craft/blob/main/CONTRIBUTING.md) if you want to contribute to this project**

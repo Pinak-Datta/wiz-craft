@@ -1,4 +1,8 @@
-/Include
-/Lib
-/Scripts
-/pyvenv.cfg
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+build/
+dist/
+*.csv

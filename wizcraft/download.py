@@ -1,6 +1,5 @@
 # download.py
 
-import pandas as pd
 from wizcraft.io import Output
 
 

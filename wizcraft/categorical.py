@@ -1,7 +1,5 @@
-# categorical.py
-import random
-
 import pandas as pd
+
 from wizcraft.io import Output
 
 
@@ -23,17 +21,18 @@ class EncodeCategoricalValues:
 
         self.output.display_table("Columns present in the dataset", data)
 
-    def perform_one_hot_encoding(self):
-        column_name = self.output.ask(
-            "\nEnter the column name to perform one-hot encoding", color="yellow"
-        )
+    def perform_one_hot_encoding(self, column_name=None):
+        if column_name is None:
+            column_name = self.output.ask(
+                "\nEnter the column name to perform one-hot encoding", color="yellow"
+            )
 
         if column_name not in self.dataset.columns:
             self.output.c_print(
                 f"Error: Column [underline]'{column_name}'[/underline] not found in the dataset.",
                 code="danger",
             )
-            return
+            return self.dataset
 
         if pd.api.types.is_object_dtype(self.dataset[column_name]):
             encoded_column = pd.get_dummies(
@@ -49,11 +48,12 @@ class EncodeCategoricalValues:
             # self.dataset.drop(column_name, axis=1, inplace=True)
             # self.dataset = pd.concat([self.dataset, encoded_column], axis=1)
             return self.dataset
-        else:
-            self.output.c_print(
-                f"Error: Column [underline]'{column_name}'[/underline] is not a categorical column. Cannot perform one-hot encoding.",
-                code="danger",
-            )
+
+        self.output.c_print(
+            f"Error: Column [underline]'{column_name}'[/underline] is not a categorical column. Cannot perform one-hot encoding.",
+            code="danger",
+        )
+        return self.dataset
 
     def show_dataset(self):
         n_rows = int(input("Enter the number of rows to show: "))
@@ -81,5 +81,5 @@ if __name__ == "__main__":
 
     categorical_encoder = EncodeCategoricalValues(df)
     categorical_encoder.show_categorical_columns()
-    df=categorical_encoder.perform_one_hot_encoding()
+    df = categorical_encoder.perform_one_hot_encoding()
     categorical_encoder.show_dataset()

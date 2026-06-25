@@ -1,32 +1,29 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: "[BUG]"
+title: "[Bug]: "
 labels: bug
 assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+**What happened?**
+A clear description of the bug.
 
-**To Reproduce**
-Steps to reproduce the behaviour:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+**How can we reproduce it?**
+Please include the command you ran and a small sample CSV if possible.
 
-**Expected behaviour**
+**Expected behavior**
 A clear and concise description of what you expected to happen.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+**Actual output or traceback**
+Paste the error output here.
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+**Environment**
+- OS:
+- Python version:
+- WizCraft version:
+- Install method: `pip install wiz-craft` / local editable install / other
 
 **Additional context**
 Add any other context about the problem here.
