@@ -8,7 +8,7 @@
 </p>
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT) 
-[![CI](https://github.com/wiz-craft/wiz-craft/actions/workflows/ci.yml/badge.svg)](https://github.com/wiz-craft/wiz-craft/actions/workflows/ci.yml)
+[![CI](https://github.com/Pinak-Datta/wiz-craft/actions/workflows/ci.yml/badge.svg)](https://github.com/Pinak-Datta/wiz-craft/actions/workflows/ci.yml)
 
 [![Downloads](https://static.pepy.tech/personalized-badge/wiz-craft?period=total&units=international_system&left_color=brightgreen&right_color=orange&left_text=Downloads)](https://pepy.tech/project/wiz-craft)
 
@@ -21,7 +21,7 @@ WizCraft is a beginner-friendly Command Line Interface (CLI) tool for preparing 
 
 **[Try the tool online here](https://replit.com/@PinakDatta/DataWiz)**
 
-**Check out the [Contribution Guide](https://github.com/wiz-craft/wiz-craft/blob/main/CONTRIBUTING.md) if you want to contribute to this project**
+**Check out the [Contribution Guide](https://github.com/Pinak-Datta/wiz-craft/blob/main/CONTRIBUTING.md) if you want to contribute to this project**
 
 ## Table of Contents
 
@@ -169,4 +169,4 @@ Current priorities:
 See [ROADMAP.md](ROADMAP.md) for the full direction.
 
 ## Contributing to the Project
-**Check out the [Contribution Guide](https://github.com/wiz-craft/wiz-craft/blob/main/CONTRIBUTING.md) if you want to contribute to this project**
+**Check out the [Contribution Guide](https://github.com/Pinak-Datta/wiz-craft/blob/main/CONTRIBUTING.md) if you want to contribute to this project**

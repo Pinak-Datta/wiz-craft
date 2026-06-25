@@ -45,9 +45,9 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/wiz-craft/wiz-craft"
-Repository = "https://github.com/wiz-craft/wiz-craft"
-Issues = "https://github.com/wiz-craft/wiz-craft/issues"
+Homepage = "https://github.com/Pinak-Datta/wiz-craft"
+Repository = "https://github.com/Pinak-Datta/wiz-craft"
+Issues = "https://github.com/Pinak-Datta/wiz-craft/issues"
 
 [project.scripts]
 wizcraft = "wizcraft.cli:main"
