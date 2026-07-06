@@ -54,7 +54,8 @@ def inspect_dataset(csv_file, target=None, missing_drop_threshold=0.5):
     _inspect_constant_columns(dataset, issues, recipe, target)
     _inspect_id_like_columns(dataset, issues, recipe, target)
     _inspect_date_columns(dataset, issues, target, profile_map)
-    _inspect_categorical_columns(dataset, issues, recipe, target)
+    _inspect_text_columns(issues, target, profile_map)
+    _inspect_categorical_columns(dataset, issues, recipe, target, profile_map)
     _inspect_numeric_outliers(dataset, issues, target)
     _inspect_target(dataset, issues, target)
     _inspect_leakage(dataset, issues, target)
@@ -211,7 +212,7 @@ def _infer_column_type(series, column_name):
         return "numeric"
     if _looks_like_datetime(series):
         return "datetime"
-    if _looks_text_like(series):
+    if _looks_text_like(series, column_name):
         return "text"
     return "categorical"
 
@@ -362,9 +363,30 @@ def _inspect_date_columns(dataset, issues, target, profile_map):
         )
 
 
-def _inspect_categorical_columns(dataset, issues, recipe, target):
+def _inspect_text_columns(issues, target, profile_map):
+    for column, profile in profile_map.items():
+        if column == target:
+            continue
+        if profile.inferred_type != "text":
+            continue
+
+        issues.append(
+            DoctorIssue(
+                severity="low",
+                column=column,
+                category="Text",
+                message="Column looks like free-form text.",
+                suggestion="Apply NLP preprocessing (e.g. tokenization, TF-IDF, or embeddings) instead of standard encoding.",
+            )
+        )
+
+
+def _inspect_categorical_columns(dataset, issues, recipe, target, profile_map):
     for column in dataset.select_dtypes(include=["object", "category", "bool"]).columns:
         if column == target:
+            continue
+        profile = profile_map.get(column)
+        if profile and profile.inferred_type == "text":
             continue
         if dataset[column].isna().mean() >= 0.5:
             continue
@@ -549,13 +571,33 @@ def _looks_like_datetime(series):
     return float(parsed.notna().mean()) >= 0.8
 
 
-def _looks_text_like(series):
+def _looks_text_like(series, column_name):
     sample = series.dropna().astype(str)
     if sample.empty:
         return False
+
+    lower_name = column_name.lower()
+    text_name_tokens = {
+        "review",
+        "description",
+        "comment",
+        "comments",
+        "note",
+        "notes",
+        "feedback",
+        "summary",
+        "text",
+        "message",
+        "remarks",
+    }
+    looks_named_like_text = any(token in lower_name for token in text_name_tokens)
+
     average_length = float(sample.str.len().mean())
     unique_rate = sample.nunique() / max(len(sample), 1)
-    return average_length >= 40 and unique_rate >= 0.5
+
+    stats_signal = average_length >= 40 and unique_rate >= 0.5
+    name_signal = looks_named_like_text and average_length >= 10
+    return stats_signal or name_signal
 
 
 def _score_color(score):
