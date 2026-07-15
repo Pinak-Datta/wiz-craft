@@ -61,6 +61,51 @@ def test_doctor_finds_issues_and_builds_recipe(tmp_path):
     )
 
 
+def test_doctor_detects_text_columns_and_skips_categorical_encoding(tmp_path):
+    csv_file = tmp_path / "train.csv"
+    pd.DataFrame(
+        {
+            "review": [
+                "Great onboarding experience and very helpful support team.",
+                "The app is stable but navigation feels confusing in some screens.",
+                "Fast performance overall, though reporting export is still limited.",
+                "Setup was simple, but the documentation needs more examples.",
+                "Useful features with clear value for daily operations.",
+            ],
+            "city": ["Kolkata", "Delhi", "Kolkata", "Mumbai", "Delhi"],
+            "target": [1, 0, 1, 0, 1],
+        }
+    ).to_csv(csv_file, index=False)
+
+    report = inspect_dataset(csv_file, target="target")
+
+    profile_by_column = {profile.column: profile for profile in report.column_profiles}
+    assert profile_by_column["review"].inferred_type == "text"
+    assert any(issue.category == "Text" and issue.column == "review" for issue in report.issues)
+    assert any(
+        issue.category == "Text"
+        and issue.column == "review"
+        and "NLP preprocessing" in issue.suggestion
+        for issue in report.issues
+    )
+
+    assert not any(
+        issue.category == "Categorical" and issue.column == "review"
+        for issue in report.issues
+    )
+    assert not any(
+        step["action"] == "one_hot_encode" and step["params"].get("column") == "review"
+        for step in report.recipe.steps
+    )
+
+    assert profile_by_column["city"].inferred_type == "categorical"
+    assert any(
+        step["action"] == "one_hot_encode"
+        and step["params"] == {"column": "city", "drop_first": True}
+        for step in report.recipe.steps
+    )
+
+
 def test_doctor_writes_recipe_json(tmp_path):
     csv_file = tmp_path / "train.csv"
     recipe_file = tmp_path / "recipe.json"
