@@ -50,6 +50,7 @@ WizCraft is a beginner-friendly Command Line Interface (CLI) tool for preparing 
 - Download the preprocessed dataset with your desired modifications.
 - Save preprocessing recipes and replay them on future CSV files.
 - Audit datasets with `wizcraft doctor`, detect modeling risks, and generate suggested cleaning recipes.
+- Detect free-form text columns so review, feedback, comment, notes, and description fields are not treated like ordinary categorical values.
 
 ## Getting Started
 
@@ -121,7 +122,8 @@ The doctor currently checks for:
 - Duplicate rows
 - ID-like columns
 - Constant and near-constant columns
-- Categorical columns that need encoding
+- Text-heavy columns that should use NLP preprocessing instead of one-hot encoding
+- Categorical columns that need encoding, while skipping columns detected as free-form text
 - Date/datetime columns that may need feature extraction
 - Numeric outliers using the IQR rule
 - Imbalanced target columns
@@ -171,6 +173,7 @@ wizcraft doctor train.csv --target Survived --html report.html
 
 1. Identify and list categorical columns.
 2. Perform one-hot encoding on categorical columns.
+3. Skip text-heavy columns such as reviews, comments, notes, feedback, messages, and descriptions so they can be handled with NLP-specific preprocessing.
 
 ### Feature Scaling
 
