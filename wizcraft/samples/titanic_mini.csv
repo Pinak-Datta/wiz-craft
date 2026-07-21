@@ -1,0 +1,11 @@
+PassengerId,Name,Sex,Age,Fare,Cabin,Embarked,Ticket,Review,Survived
+1,Allen Mr. William,male,35,71.2833,C85,C,PC 17599,"Enjoyed the service and staff were thoughtful during the trip.",1
+2,Brown Mrs. Clara,female,38,71.2833,,C,PC 17599,"Cabin was comfortable but boarding felt confusing and slow.",1
+3,Clark Miss. Anna,female,,7.925,,S,STON/O2. 3101282,"Travel experience was fine overall with helpful crew.",1
+4,Davis Mr. John,male,28,8.05,,S,373450,"Food options were limited and the trip felt stressful.",0
+5,Evans Mr. Robert,male,2,21.075,,S,349909,"Family support on board was good despite a crowded deck.",0
+6,Foster Mrs. Helen,female,54,51.8625,E46,S,113803,"Clear communication and calm staff made the journey easier.",1
+7,Green Mr. Peter,male,80,512.3292,B51,C,113781,"Premium cabin was excellent but the price was unusually high.",1
+8,Harris Mr. Mark,male,,8.4583,,Q,330877,"Boarding was late and directions were difficult to follow.",0
+9,Iverson Miss. Rose,female,19,7.8792,,Q,330877,"Short review text",1
+9,Iverson Miss. Rose,female,19,7.8792,,Q,330877,"Short review text",1

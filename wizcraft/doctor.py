@@ -97,6 +97,12 @@ def write_html_report(report, output_path):
     return output
 
 
+def write_markdown_report(report, output_path):
+    output = Path(output_path)
+    output.write_text(report_to_markdown(report), encoding="utf-8")
+    return output
+
+
 def report_to_dict(report):
     return {
         "csv_file": report.csv_file,
@@ -109,6 +115,97 @@ def report_to_dict(report):
         "issues": [asdict(issue) for issue in report.issues],
         "recipe": report.recipe.to_dict() if report.recipe else None,
     }
+
+
+def report_to_markdown(report):
+    lines = [
+        "# WizCraft Dataset Doctor Report",
+        "",
+        "## Summary",
+        "",
+        _markdown_table(
+            ["Metric", "Value"],
+            [
+                ["Dataset", report.csv_file],
+                ["Rows", f"{report.rows:,}"],
+                ["Columns", f"{report.columns:,}"],
+                ["Health score", f"{report.score}/100"],
+                ["Status", _score_status(report.score)],
+                ["Suggested task", report.suggested_task],
+            ],
+        ),
+        "",
+        "## Detected Column Types",
+        "",
+        _markdown_table(
+            ["Column", "Type", "Missing rate", "Unique values"],
+            [
+                [
+                    profile.column,
+                    profile.inferred_type,
+                    f"{profile.missing_rate:.1%}",
+                    str(profile.unique_count),
+                ]
+                for profile in report.column_profiles
+            ],
+        ),
+        "",
+    ]
+
+    if report.recipe and report.recipe.steps:
+        lines.extend(
+            [
+                "## Suggested Cleaning Recipe",
+                "",
+                _markdown_table(
+                    ["#", "Action", "Detail", "Confidence"],
+                    [
+                        [
+                            str(index),
+                            _format_action(step["action"]),
+                            _format_params(step.get("params", {})),
+                            step.get("confidence", "medium").title(),
+                        ]
+                        for index, step in enumerate(report.recipe.steps, 1)
+                    ],
+                ),
+                "",
+            ]
+        )
+    else:
+        lines.extend(
+            [
+                "## Suggested Cleaning Recipe",
+                "",
+                "No safe automatic recipe steps were suggested.",
+                "",
+            ]
+        )
+
+    lines.extend(["## Findings", ""])
+    if report.issues:
+        lines.extend(
+            [
+                _markdown_table(
+                    ["Severity", "Column", "Category", "Finding", "Next step"],
+                    [
+                        [
+                            issue.severity.title(),
+                            issue.column or "-",
+                            issue.category,
+                            issue.message,
+                            issue.suggestion,
+                        ]
+                        for issue in report.issues
+                    ],
+                ),
+                "",
+            ]
+        )
+    else:
+        lines.extend(["No major issues found.", ""])
+
+    return "\n".join(lines)
 
 
 def render_report(report, console=None):
@@ -386,7 +483,13 @@ def _inspect_categorical_columns(dataset, issues, recipe, target, profile_map):
         if column == target:
             continue
         profile = profile_map.get(column)
-        if profile and profile.inferred_type == "text":
+        if profile and profile.inferred_type in {
+            "constant",
+            "datetime",
+            "id",
+            "mostly_empty",
+            "text",
+        }:
             continue
         if dataset[column].isna().mean() >= 0.5:
             continue
@@ -655,6 +758,23 @@ def _build_type_table(report):
 
 def _format_action(action):
     return action.replace("_", " ").title()
+
+
+def _markdown_table(headers, rows):
+    table = [
+        "| " + " | ".join(_escape_markdown_cell(header) for header in headers) + " |",
+        "| " + " | ".join("---" for _ in headers) + " |",
+    ]
+    for row in rows:
+        table.append(
+            "| " + " | ".join(_escape_markdown_cell(value) for value in row) + " |"
+        )
+    return "\n".join(table)
+
+
+def _escape_markdown_cell(value):
+    text = str(value)
+    return text.replace("\\", "\\\\").replace("|", "\\|").replace("\n", "<br>")
 
 
 def _format_params(params):

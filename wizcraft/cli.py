@@ -2,16 +2,21 @@ import argparse
 import json
 import sys
 
+from rich.console import Console
+from rich.table import Table
+
 from wizcraft.doctor import (
     inspect_dataset,
     render_report,
     report_to_dict,
     write_html_report,
     write_json_report,
+    write_markdown_report,
     write_recipe,
 )
 from wizcraft.preprocess import Preprocess
 from wizcraft.recipe import apply_recipe
+from wizcraft.samples import copy_sample, list_samples
 
 
 def build_parser():
@@ -75,12 +80,56 @@ def build_doctor_parser():
         help="Write the doctor report to an HTML file.",
     )
     parser.add_argument(
+        "--markdown",
+        help="Write the doctor report to a Markdown file.",
+    )
+    parser.add_argument(
         "--missing-drop-threshold",
         type=float,
         default=0.5,
         help="Missing-value rate at which a column is flagged for review instead of imputation.",
     )
     return parser
+
+
+def build_sample_parser():
+    parser = argparse.ArgumentParser(
+        prog="wizcraft sample",
+        description="Create a sample CSV that you can inspect with WizCraft.",
+    )
+    parser.add_argument(
+        "name",
+        nargs="?",
+        help="Sample name to create. Run without a name to list samples.",
+    )
+    parser.add_argument(
+        "--out",
+        help="Output CSV path. Defaults to the sample filename.",
+    )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Overwrite the output file if it already exists.",
+    )
+    return parser
+
+
+def render_sample_list(console=None):
+    console = console or Console()
+    table = Table(title="Available WizCraft Samples")
+    table.add_column("Name", style="bold green")
+    table.add_column("Target")
+    table.add_column("Filename")
+    table.add_column("Description")
+    for sample in list_samples():
+        table.add_row(
+            sample["name"],
+            sample["target"],
+            sample["filename"],
+            sample["description"],
+        )
+    console.print(table)
+    console.print("[dim]Create one with: wizcraft sample titanic[/dim]")
 
 
 def main(argv=None):
@@ -113,6 +162,23 @@ def main(argv=None):
         if args.html:
             write_html_report(report, args.html)
             print(f"HTML report saved to {args.html}", file=sys.stderr)
+        if args.markdown:
+            write_markdown_report(report, args.markdown)
+            print(f"Markdown report saved to {args.markdown}", file=sys.stderr)
+        return 0
+
+    if argv and argv[0] == "sample":
+        parser = build_sample_parser()
+        args = parser.parse_args(argv[1:])
+        if not args.name:
+            render_sample_list()
+            return 0
+        try:
+            output = copy_sample(args.name, output_path=args.out, overwrite=args.force)
+        except (FileExistsError, ValueError) as error:
+            print(str(error), file=sys.stderr)
+            return 2
+        print(f"Sample saved to {output}")
         return 0
 
     parser = build_parser()

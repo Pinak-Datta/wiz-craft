@@ -7,6 +7,7 @@ from wizcraft.doctor import (
     report_to_dict,
     write_html_report,
     write_json_report,
+    write_markdown_report,
     write_recipe,
 )
 
@@ -106,6 +107,37 @@ def test_doctor_detects_text_columns_and_skips_categorical_encoding(tmp_path):
     )
 
 
+def test_doctor_skips_string_ids_when_encoding_categoricals(tmp_path):
+    csv_file = tmp_path / "train.csv"
+    pd.DataFrame(
+        {
+            "customer_id": ["CUST-001", "CUST-002", "CUST-003", "CUST-004"],
+            "city": ["Kolkata", "Delhi", "Kolkata", "Mumbai"],
+            "target": [1, 0, 1, 0],
+        }
+    ).to_csv(csv_file, index=False)
+
+    report = inspect_dataset(csv_file, target="target")
+
+    profile_by_column = {profile.column: profile for profile in report.column_profiles}
+    assert profile_by_column["customer_id"].inferred_type == "id"
+    assert any(issue.category == "Identifier" and issue.column == "customer_id" for issue in report.issues)
+    assert not any(
+        issue.category == "Categorical" and issue.column == "customer_id"
+        for issue in report.issues
+    )
+    assert not any(
+        step["action"] == "one_hot_encode"
+        and step["params"].get("column") == "customer_id"
+        for step in report.recipe.steps
+    )
+    assert any(
+        step["action"] == "one_hot_encode"
+        and step["params"] == {"column": "city", "drop_first": True}
+        for step in report.recipe.steps
+    )
+
+
 def test_doctor_writes_recipe_json(tmp_path):
     csv_file = tmp_path / "train.csv"
     recipe_file = tmp_path / "recipe.json"
@@ -154,3 +186,25 @@ def test_doctor_report_can_be_exported_to_html(tmp_path):
     html = html_file.read_text(encoding="utf-8")
     assert "Dataset Health Score" in html
     assert "Suggested Cleaning Recipe" in html
+
+
+def test_doctor_report_can_be_exported_to_markdown(tmp_path):
+    csv_file = tmp_path / "train.csv"
+    markdown_file = tmp_path / "report.md"
+    pd.DataFrame(
+        {
+            "target": [1, 0, 1],
+            "city": ["Kolkata", "Delhi", "Mumbai"],
+            "score": [1.0, None, 3.0],
+        }
+    ).to_csv(csv_file, index=False)
+    report = inspect_dataset(csv_file, target="target")
+
+    write_markdown_report(report, markdown_file)
+
+    markdown = markdown_file.read_text(encoding="utf-8")
+    assert "# WizCraft Dataset Doctor Report" in markdown
+    assert "| Health score |" in markdown
+    assert "## Detected Column Types" in markdown
+    assert "## Suggested Cleaning Recipe" in markdown
+    assert "## Findings" in markdown

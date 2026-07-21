@@ -1,0 +1,11 @@
+customer_id,signup_date,city,plan,monthly_spend,support_tickets,last_login_days,feedback,internal_notes,churned
+CUST-001,2024-01-15,Kolkata,basic,19.99,1,3,"Fast setup and friendly support helped our team get started quickly.","",0
+CUST-002,2024-02-03,Delhi,pro,49.99,5,45,"The dashboard is useful but invoice exports are hard to understand.","Needs onboarding follow-up",1
+CUST-003,2024-02-18,Mumbai,basic,,0,12,"Simple product and good value for a small operation.","",0
+CUST-004,2024-03-02,Bengaluru,enterprise,299.99,9,90,"Powerful features but setup took longer than expected for admins.","Escalated once",1
+CUST-005,2024-03-17,Kolkata,pro,49.99,2,7,"Reporting is clear and the account team responds quickly.","",0
+CUST-006,2024-04-11,Delhi,basic,19.99,,120,"The app feels slow and there are too many steps to finish tasks.","Requested discount",1
+CUST-007,2024-04-19,Chennai,enterprise,9999.99,3,1,"Excellent support and strong controls for larger teams.","Possible annual upgrade",0
+CUST-008,not-a-date,Mumbai,pro,49.99,4,33,"Feature set is solid but notifications need better defaults.","",1
+CUST-009,2024-05-01,Bengaluru,basic,19.99,0,5,"Great for daily work and easy enough for new users.","",0
+CUST-010,2024-05-09,Kolkata,basic,19.99,0,5,"Great for daily work and easy enough for new users.","",0

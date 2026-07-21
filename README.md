@@ -17,7 +17,25 @@
 
 # WizCraft - CLI-Based Dataset Preprocessing Tool
 
-WizCraft is a beginner-friendly Command Line Interface (CLI) tool for preparing tabular datasets for machine learning. It helps you inspect a CSV, diagnose data quality issues, handle missing values, encode categorical columns, scale numeric features, save a cleaned dataset, and export replayable preprocessing recipes.
+WizCraft is a beginner-friendly CLI that audits messy CSV files, explains what needs attention, and creates repeatable preprocessing recipes for machine-learning workflows.
+
+Use it when you want to:
+
+- Check a dataset before modeling.
+- Spot missing values, IDs, text-heavy columns, date columns, outliers, duplicates, leakage risks, and target imbalance.
+- Export a report as terminal output, JSON, HTML, or Markdown.
+- Save safe preprocessing steps as a recipe and replay them on future CSV files.
+
+## 60-Second Quickstart
+
+```bash
+pip install wiz-craft
+wizcraft sample titanic --out titanic.csv
+wizcraft doctor titanic.csv --target Survived --write-recipe titanic.recipe.json --markdown titanic-report.md
+wizcraft apply titanic.csv --recipe titanic.recipe.json --out titanic-clean.csv
+```
+
+That creates a sample dataset, audits it, writes a Markdown report, saves a preprocessing recipe, and applies the recipe to create a cleaned CSV.
 
 **[Try the tool online here](https://replit.com/@PinakDatta/DataWiz)**
 
@@ -26,8 +44,10 @@ WizCraft is a beginner-friendly Command Line Interface (CLI) tool for preparing 
 ## Table of Contents
 
 - [Features](#features)
+- [60-Second Quickstart](#60-second-quickstart)
 - [Getting Started](#getting-started)
   - [Installation](#installation)
+- [Sample Datasets](#sample-datasets)
 - [Dataset Doctor](#dataset-doctor)
 - [Tasks](#tasks)
   - [Data Description](#data-description)
@@ -51,6 +71,8 @@ WizCraft is a beginner-friendly Command Line Interface (CLI) tool for preparing 
 - Save preprocessing recipes and replay them on future CSV files.
 - Audit datasets with `wizcraft doctor`, detect modeling risks, and generate suggested cleaning recipes.
 - Detect free-form text columns so review, feedback, comment, notes, and description fields are not treated like ordinary categorical values.
+- Create bundled demo CSVs with `wizcraft sample`.
+- Export Dataset Doctor reports as terminal output, JSON, HTML, or Markdown.
 
 ## Getting Started
 
@@ -85,16 +107,22 @@ wiz_obj.start()
 
 Follow the on-screen prompts to select the target variable and perform preprocessing tasks.
 
+Create a sample CSV:
+
+```bash
+wizcraft sample customers --out customers.csv
+```
+
 Audit a dataset and generate a suggested recipe:
 
 ```bash
 wizcraft doctor train.csv --target Survived --write-recipe recipe.json
 ```
 
-Export the same audit as JSON or HTML:
+Export the same audit as JSON, HTML, or Markdown:
 
 ```bash
-wizcraft doctor train.csv --target Survived --json report.json --html report.html
+wizcraft doctor train.csv --target Survived --json report.json --html report.html --markdown report.md
 ```
 
 Replay a saved recipe on another CSV:
@@ -106,6 +134,21 @@ wizcraft apply new-data.csv --recipe cleaned.recipe.json --out new-data-clean.cs
 <p align="center">
   <img src="https://i.imgur.com/jYLwMN7.png" alt="wizcraft-cli_welcome" width = "600" height = "300" />
 </p>
+
+## Sample Datasets
+
+WizCraft ships with small demo datasets so new users can try the CLI immediately:
+
+```bash
+wizcraft sample
+wizcraft sample titanic --out titanic.csv
+wizcraft sample customers --out customers.csv
+```
+
+Available samples:
+
+- `titanic`: passenger survival dataset with missing values, duplicates, outliers, categorical columns, and review text.
+- `customers`: customer churn dataset with IDs, dates, missing values, text feedback, outliers, and categorical columns.
 
 ## Dataset Doctor
 
@@ -142,6 +185,7 @@ You can also use Doctor output in automation:
 ```bash
 wizcraft doctor train.csv --target Survived --format json
 wizcraft doctor train.csv --target Survived --html report.html
+wizcraft doctor train.csv --target Survived --markdown report.md
 ```
 
 ## Features Available
