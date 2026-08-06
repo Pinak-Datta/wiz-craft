@@ -84,6 +84,33 @@ Install WizCraft from PyPI:
 pip install wiz-craft
 ```
 
+### Quickstart with a tiny CSV
+
+Create a small sample dataset:
+
+```bash
+cat > sample.csv <<'CSV'
+customer_id,age,city,bought
+1,32,Kolkata,1
+2,,Delhi,0
+3,45,Kolkata,1
+4,28,Mumbai,0
+CSV
+```
+
+Run Dataset Doctor with `bought` as the target column and save its suggested
+cleaning recipe:
+
+```bash
+wizcraft doctor sample.csv --target bought --write-recipe recipe.json
+```
+
+Apply the saved recipe to create a cleaned CSV:
+
+```bash
+wizcraft apply sample.csv --recipe recipe.json --out clean.csv
+```
+
 Start the interactive CLI with a CSV file:
 
 ```bash
